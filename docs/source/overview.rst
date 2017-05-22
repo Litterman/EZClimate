@@ -1,0 +1,15 @@
+Overview
+========
+Pricing greenhouse gas emissions is a risk management problem. It involves making trade-offs between consumption today and unknown damages in the (distant) future. The optimal carbon dioxide (:math:`CO_2`) price, thus, is based on society’ s willingness to substitute consumption across time and across uncertain states of nature. Standard constant relative risk aversion preference specifications, meanwhile, conflate the two. Moreover, they are inconsistent with observed asset valuations, based on a large body of work in macroeconomics and finance. This literature has developed a richer set of preferences that are more consistent with asset price behavior and separate risk across time and across states of nature. 
+
+In this model, we explore the implications of these richer preference specifications for the optimal :math:`CO_2` price. We develop the EZ-Climate model, a simple discrete-time model in which the representative agent has an Epstein-Zin preference specification, and in which uncertainty about the effect of :math:`CO_2` emissions on global temperature and on eventual damages is gradually resolved over time. In the EZ-Climate model the optimal price is equal to the price of one ton of :math:`CO_2` emitted at any given point in time that maximizes the utility of the representative agent at that time. We embed a number of features including tail risk, the potential for technological change, and backstop technologies. In contrast to most modeled carbon price paths, the EZ-Climate model suggests a high optimal carbon price today that is expected to decline over time. It also points to the importance of backstop technologies and to potentially very large deadweight costs of delay.
+
+Our representative agent solves the optimization problem of trading off the (known) costs of climate mitigation against the uncertain future benefits associated with mitigation. She maximizes lifetime utility at each time and for each state of nature by choosing the optimal path of mitigation, :math:`x_t^*(\theta_t)`, dependent on Earth’s fragility,  :math:`\theta_t`.
+
+Mitigating emissions is costly. Hence, assuming no government action to price carbon, atomistic agents do zero mitigation. However, as GHGs build up in the atmosphere, temperatures rise. As a result, a fraction of the baseline consumption is lost to damages. The damages as a function of mitigation are not known ex-ante. They are, in turn, a function of :math:`\theta_t`. Each period of the model, agents learn more about the level of fragility, but they only know the actual fragility in the final two periods of the model.
+
+These assumptions simplify reality in two important ways: As :math:`\theta_t` is the only unknown in EZ-Climate model, we do not allow for interactions of shocks to fragility with those to other state variables (e.g., productivity). The second simplification is the assumption of full knowledge of :math:`\theta` in period :math:`T-1`.
+
+See paper_ for futher detail.
+
+.. _paper: http://www.nber.org/papers/w22795
