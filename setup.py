@@ -27,7 +27,7 @@ setup(name='ezclimate',
       packages=['ezclimate', 'ezclimate.optimization', 'ezclimate.analysis'],
       install_requires=['numpy',],
       include_package_data=False,
-      zip_safe=True
+      zip_safe=True,
       cmdclass = {'build_py': build_py},
       use_2to3=True
       )
