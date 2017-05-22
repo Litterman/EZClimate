@@ -35,9 +35,9 @@ class CoordinateDescent(object):
 		self.iterations = iterations
 	
 	def _min_func(self, x, m, i):
-  		m_copy = m.copy()
-   		m_copy[i] = x
-   		return -self.u.utility(m_copy)[0]
+		m_copy = m.copy()
+		m_copy[i] = x
+		return -self.u.utility(m_copy)[0]
 
 	def _minimize_node(self, node, m):
 		return fmin(self._min_func, x0=m[node], args=(m, node), disp=False)

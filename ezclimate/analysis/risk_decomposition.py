@@ -2,7 +2,7 @@ from __future__ import division, print_function
 import numpy as np
 from ezclimate.tools import write_columns_csv, append_to_existing
 from ezclimate.storage_tree import BigStorageTree
-import tools
+import ezclimate.analysis.tools
 
 class RiskDecomposition(object):
 	"""Calculate and save analysis of output from the EZ-Climate model.

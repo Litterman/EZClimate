@@ -14,5 +14,5 @@ if missing_dependencies:
 __all__ = ["bau", "cost", "damage", "damage_simulation", "utility"
 		   "optimization", "forcing", "tools", "tree", "storage_tree", "analysis"]
 
-import optimization
-import analysis
+import ezclimate.optimization
+import ezclimate.analysis
