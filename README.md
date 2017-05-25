@@ -13,7 +13,7 @@ In order to get the tip documentation, change directory to the `doc` subfolder a
 
 ## Installation
 
-We encourage you to use pip to install EZ-Climate on your system. 
+We encourage you to use pip to install ezclimate on your system. 
 
 ```bash
 pip install ezclimate
