@@ -16,7 +16,7 @@ results.
 Install EZ-Climate
 ------------------
 
-We encourage you to use pip_ to install EZ-Climate on your system. 
+We encourage you to use pip_ to install ezclimate on your system. 
 ::
   
   pip install ezclimate
@@ -27,7 +27,7 @@ If you wish to build from sources, download_ or clone_ the repository and use
   python setup.py install
 
 
-.. _download: https://pypi.python.org/pypi/ez_climate/
-.. _clone: https://github.com/Litterman/EZ_Climate.git
+.. _download: https://pypi.python.org/pypi/ezclimate/
+.. _clone: https://github.com/Litterman/EZClimate.git
 
 .. _pip: http://www.pip-installer.org/en/latest/

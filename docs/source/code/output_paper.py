@@ -24,18 +24,17 @@ u = EZUtility(tree=t, damage=df, cost=c, period_len=5.0, eis=0.9, ra=7.0, time_p
 
 
 from ezclimate.optimization import GeneticAlgorithm, GradientSearch
+import numpy as np
 
-ga_model = GeneticAlgorithm(pop_amount=150, num_generations=150, cx_prob=0.8, mut_prob=0.5, 
+ga_model = GeneticAlgorithm(pop_amount=150, num_generations=75, cx_prob=0.8, mut_prob=0.5, 
                             bound=2.0, num_feature=63, utility=u, print_progress=True)
 gs_model = GradientSearch(var_nums=63, utility=u, accuracy=1e-8, 
                           iterations=200, print_progress=True)
-
 final_pop, fitness = ga_model.run()
 sort_pop = final_pop[np.argsort(fitness)][::-1]
 m_opt, u_opt = gs_model.run(initial_point_list=sort_pop, topk=1)
 
-print("SCC: ", c.price(0, m[0], 0))
-
+print("SCC: ", c.price(0, m_opt[0], 0))
 
 
 from ezclimate.tree import TreeModel
@@ -44,6 +43,7 @@ from ezclimate.cost import DLWCost
 from ezclimate.damage import DLWDamage
 from ezclimate.utility import EZUtility
 from ezclimate.optimization import GeneticAlgorithm, GradientSearch
+import numpy as np
 
 def base_case():
 	t = TreeModel(decision_times=[0, 15, 45, 85, 185, 285, 385])
@@ -56,11 +56,11 @@ def base_case():
 
 	df = DLWDamage(tree=t, bau=bau_default_model, cons_growth=0.015, ghg_levels=[450, 650, 1000], subinterval_len=5)
 	df.damage_simulation(draws=4000000, peak_temp=6.0, disaster_tail=18.0, tip_on=True, 
-							 temp_map=1, temp_dist_params=None, maxh=100.0, cons_growth=0.015)
+							 temp_map=1, temp_dist_params=None, maxh=100.0)
 
 	u = EZUtility(tree=t, damage=df, cost=c, period_len=5.0, eis=0.9, ra=7.0, time_pref=0.005)
 
-	ga_model = GeneticAlgorithm(pop_amount=150, num_generations=150, cx_prob=0.8, mut_prob=0.5, 
+	ga_model = GeneticAlgorithm(pop_amount=150, num_generations=75, cx_prob=0.8, mut_prob=0.5, 
 	                            bound=1.5, num_feature=63, utility=u, print_progress=True)
 	gs_model = GradientSearch(var_nums=63, utility=u, accuracy=1e-8, 
 	                          iterations=200, print_progress=True)
@@ -69,7 +69,7 @@ def base_case():
 	sort_pop = final_pop[np.argsort(fitness)][::-1]
 	m_opt, u_opt = gs_model.run(initial_point_list=sort_pop, topk=1)
 
-	print("SCC: ", c.price(0, m[0], 0))
+	print("SCC: ", c.price(0, m_opt[0], 0))
 
 if __name__ == "__main__":
 	base_case()

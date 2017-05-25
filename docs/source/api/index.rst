@@ -15,7 +15,5 @@ Description of the functions, classes and modules contained within ezclimate.
 	cost
 	storage_tree
 	utility
-	risk_decomposition
-	climate_output
-	genetic_algorithm
-	gradient_search
+	optimization
+	analysis

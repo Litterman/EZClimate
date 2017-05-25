@@ -10,9 +10,14 @@ for dependency in hard_dependencies:
 if missing_dependencies:
     raise ImportError("Missing required dependencies {0}".format(missing_dependencies))
 
+from ezclimate.optimization import *
+from ezclimate.analysis import *
+from ezclimate.bau import *
+from ezclimate.cost import *
+from ezclimate.damage import *
+from ezclimate.damage_simulation import *
+from ezclimate.forcing import *
+from ezclimate.storage_tree import *
+from ezclimate.tree import *
+from ezclimate.utility import *
 
-__all__ = ["bau", "cost", "damage", "damage_simulation", "utility"
-		   "optimization", "forcing", "tools", "tree", "storage_tree", "analysis"]
-
-import ezclimate.optimization
-import ezclimate.analysis

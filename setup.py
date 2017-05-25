@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 try:
     from distutils.command.build_py import build_py_2to3 as build_py
@@ -20,11 +20,10 @@ setup(name='ezclimate',
         'Topic :: Climat Change :: Pricing SCC',
       ],
       keywords='EZ-climate, social cost of carbon, SCC, climate pricing',
-      url='http://github.com/Litterman/EZ_Climate',
+      url='http://github.com/Litterman/EZClimate',
       author='Robert Litterman, Kent Daniel, Gernot Wagner',
-      author_email='ez_climate@gmail.com',
       license='MIT',
-      packages=['ezclimate', 'ezclimate.optimization', 'ezclimate.analysis'],
+      packages=find_packages(),
       install_requires=['numpy',],
       include_package_data=False,
       zip_safe=True,
