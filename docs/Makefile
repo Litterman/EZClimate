@@ -5,7 +5,7 @@
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 PAPER         =
-BUILDDIR    = ../../ez_climate_docs
+BUILDDIR    = ../../ezclimate-docs
 PDFBUILDDIR = /tmp
 PDF     = ../manual.pdf
 
