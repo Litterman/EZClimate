@@ -1,7 +1,7 @@
 from __future__ import division, print_function
 import numpy as np
 import multiprocessing
-from ezclimate.tools import _pickle_method, _unpickle_method
+from tools import _pickle_method, _unpickle_method
 try:
     import copy_reg
 except:
