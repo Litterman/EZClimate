@@ -35,4 +35,3 @@ EZ-Climate is compatible with Python 2 and 3. [Numpy](http://www.numpy.org/) is 
 * Kent Daniel
 * Gernot Wagner
 
-## License
