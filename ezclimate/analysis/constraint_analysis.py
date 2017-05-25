@@ -1,6 +1,6 @@
 from __future__ import division, print_function
 from ezclimate.tools import write_columns_csv, import_csv
-import tools
+import ezclimate.analysis.tools
 
 class ConstraintAnalysis(object):
 
