@@ -4,7 +4,7 @@ EZ-Climate is a model for pricing carbon dioxide emission. It explores the impli
 
 ## Downloads
 
-You can find the most recent releases at: https://pypi.python.org/pypi/ez_climate/.
+You can find the most recent releases at: https://pypi.python.org/pypi/ezclimate/.
 
 ## Documentation
 See the [EZ-Climate User's Guide](https://oscarsjogren.github.io/dlw/) for EZ-Climate documentation.
@@ -16,7 +16,7 @@ In order to get the tip documentation, change directory to the `doc` subfolder a
 We encourage you to use pip to install EZ-Climate on your system. 
 
 ```bash
-pip install ez_climate
+pip install ezclimate
 ```
 
 If you wish to build from sources, download or clone the repository.
