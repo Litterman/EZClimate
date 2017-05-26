@@ -1,34 +1,31 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 try:
-    from distutils.command.build_py import build_py_2to3 as build_py
+    from pypandoc import convert
 except ImportError:
-    from distutils.command.build_py import build_py
-    
-def readme():
-    with open('README.md') as f:
-        return f.read()
+    warnings.append("warning: pypandoc module not found, could not convert Markdown to RST")
+    import codecs
+    read_md = lambda f: codecs.open(f, 'r', 'utf-8').read()
+else:
+    read_md = lambda f: convert(f, 'rst')
 
 setup(name='ezclimate',
-      version='1.0.1',
+      version='1.2.0b1',
       description='EZ-Climate model',
-      long_description=readme(),
+      long_description=read_md('README.md'),
       classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 3, 2',
-        'Topic :: Climat Change :: Pricing SCC',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.4'
       ],
       keywords='EZ-climate, social cost of carbon, SCC, climate pricing',
-      url='http://github.com/Litterman/EZ_Climate',
+      url='http://github.com/Litterman/EZClimate',
       author='Robert Litterman, Kent Daniel, Gernot Wagner',
-      author_email='ez_climate@gmail.com',
       license='MIT',
-      packages=['ezclimate', 'ezclimate.optimization', 'ezclimate.analysis'],
+      packages=find_packages(),
       install_requires=['numpy',],
       include_package_data=False,
-      zip_safe=True,
-      cmdclass = {'build_py': build_py},
-      use_2to3=True
+      zip_safe=True
       )
 

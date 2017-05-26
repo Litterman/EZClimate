@@ -1,5 +1,5 @@
 ================================
-Example of output from dlw-paper
+Example of output from DLW-paper
 ================================
 
 Below is an example from the DLW-paper, referred to as the base case.
@@ -44,4 +44,4 @@ Next step is to find the optimial mitigation plan using the optimization algorit
 
 
 .. literalinclude:: ../code/output_paper.py
-   :lines: 41-76
+   :lines: 40-76
