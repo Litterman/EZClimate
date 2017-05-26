@@ -3,7 +3,6 @@ from setuptools import setup, find_packages
 try:
     from pypandoc import convert
 except ImportError:
-    warnings.append("warning: pypandoc module not found, could not convert Markdown to RST")
     import codecs
     read_md = lambda f: codecs.open(f, 'r', 'utf-8').read()
 else:
