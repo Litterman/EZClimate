@@ -100,7 +100,7 @@ class DLWDamage(Damage):
 		mitigation and therefore of GHG level. A 'recombining' tree is one in which the movement from 
 		one state to the next through time is nonetheless such that an up move followed by a down move 
 		leads to the same fragility. 
-        """
+		"""
 		nperiods = self.tree.num_periods
 		sum_class = np.zeros(nperiods, dtype=int)
 		new_state = np.zeros([nperiods, self.tree.num_final_states], dtype=int)
@@ -204,31 +204,31 @@ class DLWDamage(Damage):
 			number of Monte Carlo draws
 		peak_temp : float, optional 
 			tipping point parameter 
-	    disaster_tail : float, optional
-	    	curvature of tipping point
-	    tip_on : bool, optional
-	    	flag that turns tipping points on or off
-	    temp_map : int, optional
-	    	mapping from GHG to temperature
-	            * 0: implies Pindyck displace gamma
-	            * 1: implies Wagner-Weitzman normal
-	            * 2: implies Roe-Baker
-	            * 3: implies user-defined normal 
-	            * 4: implies user-defined gamma
-	    temp_dist_params : ndarray or list, optional
-	    	if temp_map is either 3 or 4, user needs to define the distribution parameters
-	    maxh : float, optional
-	    	time paramter from Pindyck which indicates the time it takes for temp to get half 
-	            way to its max value for a given level of ghg
-	    cons_growth : float, optional 
-	    	yearly growth in consumption
-	    save_simulation : bool, optional
-	    	True if simulated values should be save, False otherwise
-		
-	    Returns
-	    -------
-	    ndarray
-	    	simulated damages
+		disaster_tail : float, optional
+			curvature of tipping point
+		tip_on : bool, optional
+			flag that turns tipping points on or off
+		temp_map : int, optional
+			mapping from GHG to temperature
+		        * 0: implies Pindyck displace gamma
+		        * 1: implies Wagner-Weitzman normal
+		        * 2: implies Roe-Baker
+		        * 3: implies user-defined normal 
+		        * 4: implies user-defined gamma
+		temp_dist_params : ndarray or list, optional
+			if temp_map is either 3 or 4, user needs to define the distribution parameters
+		maxh : float, optional
+			time paramter from Pindyck which indicates the time it takes for temp to get half 
+		        way to its max value for a given level of ghg
+		cons_growth : float, optional 
+			yearly growth in consumption
+		save_simulation : bool, optional
+			True if simulated values should be save, False otherwise
+
+		Returns
+		-------
+		ndarray
+			simulated damages
 
 		"""
 		ds = DamageSimulation(tree=self.tree, ghg_levels=self.ghg_levels, peak_temp=peak_temp,
