@@ -68,7 +68,9 @@ class DLWDamage(Damage):
 	dnum : int 
 		number of simulated damage paths
 	d : ndarray
-		simulated damages 
+		simulated damages
+	d_rcomb : ndarray
+		adjusted simulated damages for recombining tree
 	cum_forcing : ndarray
 		cumulative forcing interpolation coeffiecients, used to calculate forcing based mitigation 
 	forcing : `Forcing` object
@@ -88,6 +90,7 @@ class DLWDamage(Damage):
 		self.subinterval_len = subinterval_len
 		self.cum_forcings = None
 		self.d = None
+		self.d_rcomb = None
 		self.emit_pct = None
 		self.damage_coefs = None
 
@@ -102,6 +105,7 @@ class DLWDamage(Damage):
 		sum_class = np.zeros(nperiods, dtype=int)
 		new_state = np.zeros([nperiods, self.tree.num_final_states], dtype=int)
 		temp_prob = self.tree.final_states_prob.copy()
+		self.d_rcomb = self.d.copy()
 
 		for old_state in range(self.tree.num_final_states):
 			temp = old_state
@@ -123,11 +127,11 @@ class DLWDamage(Damage):
 				old_state = 0
 				for d_class in range(nperiods):
 					d_sum[d_class] = (self.tree.final_states_prob[old_state:old_state+sum_class[d_class]] \
-						 			 * self.d[k, old_state:old_state+sum_class[d_class], period]).sum()	
+						 			 * self.d_rcomb[k, old_state:old_state+sum_class[d_class], period]).sum()	
 					old_state += sum_class[d_class]
 					self.tree.final_states_prob[new_state[d_class, 0:sum_class[d_class]]] = temp_prob[0]
 				for d_class in range(nperiods):	
-					self.d[k, new_state[d_class, 0:sum_class[d_class]], period] = d_sum[d_class] / prob_sum[d_class]
+					self.d_rcomb[k, new_state[d_class, 0:sum_class[d_class]], period] = d_sum[d_class] / prob_sum[d_class]
 
 		self.tree.node_prob[-len(self.tree.final_states_prob):] = self.tree.final_states_prob
 		for p in range(1,nperiods-1):
@@ -151,8 +155,8 @@ class DLWDamage(Damage):
 		amat = np.ones((self.tree.num_periods, self.dnum, self.dnum))
 		bmat = np.ones((self.tree.num_periods, self.dnum))
 
-		self.damage_coefs[:, :, -1,  -1] = self.d[-1, :, :]
-		self.damage_coefs[:, :, -1,  -2] = (self.d[-2, :, :] - self.d[-1, :, :]) / self.emit_pct[-2]
+		self.damage_coefs[:, :, -1,  -1] = self.d_rcomb[-1, :, :]
+		self.damage_coefs[:, :, -1,  -2] = (self.d_rcomb[-2, :, :] - self.d_rcomb[-1, :, :]) / self.emit_pct[-2]
 		amat[:, 0, 0] = 2.0 * self.emit_pct[-2]
 		amat[:, 1:, 0] = self.emit_pct[:-1]**2
 		amat[:, 1:, 1] = self.emit_pct[:-1]
@@ -160,7 +164,7 @@ class DLWDamage(Damage):
 
 		for state in range(0, self.tree.num_final_states):
 			bmat[:, 0] = self.damage_coefs[state, :, -1,  -2] * self.emit_pct[-2]
-			bmat[:, 1:] = self.d[:-1, state, :].T
+			bmat[:, 1:] = self.d_rcomb[:-1, state, :].T
 			self.damage_coefs[state, :, 0] = np.linalg.solve(amat, bmat)
 
 	def import_damages(self, file_name="simulated_damages"):
@@ -188,6 +192,7 @@ class DLWDamage(Damage):
 
 		n = self.tree.num_final_states	
 		self.d = np.array([d[n*i:n*(i+1)] for i in range(0, self.dnum)])
+		self._damage_interpolation()
 
 	def damage_simulation(self, draws, peak_temp=9.0, disaster_tail=12.0, tip_on=True, 
 		temp_map=1, temp_dist_params=None, maxh=100.0, save_simulation=True):
@@ -232,6 +237,7 @@ class DLWDamage(Damage):
 		print("Starting damage simulation..")
 		self.d = ds.simulate(draws, write_to_file = save_simulation)
 		print("Done!")
+		self._damage_interpolation()
 		return self.d
 
 	def _forcing_based_mitigation(self, forcing, period): 
@@ -417,11 +423,11 @@ class DLWDamage(Damage):
 			damage = 0.0
 			i = 0
 			for state in range(worst_end_state, best_end_state+1): 
-				if self.d[0, state, period-1] > 1e-5:
+				if self.d_rcomb[0, state, period-1] > 1e-5:
 					deriv = 2.0 * self.damage_coefs[state, period-1, 0, 0]*self.emit_pct[0] \
 							+ self.damage_coefs[state, period-1, 0, 1]
-					decay_scale = deriv / (self.d[0, state, period-1]*np.log(0.5))
-					dist = force_mitigation - self.emit_pct[0] + np.log(self.d[0, state, period-1]) \
+					decay_scale = deriv / (self.d_rcomb[0, state, period-1]*np.log(0.5))
+					dist = force_mitigation - self.emit_pct[0] + np.log(self.d_rcomb[0, state, period-1]) \
 						   / (np.log(0.5) * decay_scale) 
 					damage += probs[i] * (0.5**(decay_scale*dist) * np.exp(-np.square(force_mitigation-self.emit_pct[0])/60.0))
 				i += 1
