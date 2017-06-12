@@ -21,7 +21,7 @@ class DamageSimulation(object):
 
     Up to a point, the Monte Carlo follows Pindyck (2012) 'Uncertain Outcomes and Climate Change
     Policy':
-    
+
         * There is a gamma distribution for temperature
         * There is a gamma distribution for economic impact (conditional on temperature)
 

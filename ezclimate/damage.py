@@ -68,7 +68,9 @@ class DLWDamage(Damage):
 	dnum : int 
 		number of simulated damage paths
 	d : ndarray
-		simulated damages 
+		simulated damages
+	d_rcomb : ndarray
+		adjusted simulated damages for recombining tree
 	cum_forcing : ndarray
 		cumulative forcing interpolation coeffiecients, used to calculate forcing based mitigation 
 	forcing : `Forcing` object
@@ -88,6 +90,7 @@ class DLWDamage(Damage):
 		self.subinterval_len = subinterval_len
 		self.cum_forcings = None
 		self.d = None
+		self.d_rcomb = None
 		self.emit_pct = None
 		self.damage_coefs = None
 
@@ -97,11 +100,12 @@ class DLWDamage(Damage):
 		mitigation and therefore of GHG level. A 'recombining' tree is one in which the movement from 
 		one state to the next through time is nonetheless such that an up move followed by a down move 
 		leads to the same fragility. 
-        """
+		"""
 		nperiods = self.tree.num_periods
 		sum_class = np.zeros(nperiods, dtype=int)
 		new_state = np.zeros([nperiods, self.tree.num_final_states], dtype=int)
 		temp_prob = self.tree.final_states_prob.copy()
+		self.d_rcomb = self.d.copy()
 
 		for old_state in range(self.tree.num_final_states):
 			temp = old_state
@@ -123,11 +127,11 @@ class DLWDamage(Damage):
 				old_state = 0
 				for d_class in range(nperiods):
 					d_sum[d_class] = (self.tree.final_states_prob[old_state:old_state+sum_class[d_class]] \
-						 			 * self.d[k, old_state:old_state+sum_class[d_class], period]).sum()	
+						 			 * self.d_rcomb[k, old_state:old_state+sum_class[d_class], period]).sum()	
 					old_state += sum_class[d_class]
 					self.tree.final_states_prob[new_state[d_class, 0:sum_class[d_class]]] = temp_prob[0]
 				for d_class in range(nperiods):	
-					self.d[k, new_state[d_class, 0:sum_class[d_class]], period] = d_sum[d_class] / prob_sum[d_class]
+					self.d_rcomb[k, new_state[d_class, 0:sum_class[d_class]], period] = d_sum[d_class] / prob_sum[d_class]
 
 		self.tree.node_prob[-len(self.tree.final_states_prob):] = self.tree.final_states_prob
 		for p in range(1,nperiods-1):
@@ -151,8 +155,8 @@ class DLWDamage(Damage):
 		amat = np.ones((self.tree.num_periods, self.dnum, self.dnum))
 		bmat = np.ones((self.tree.num_periods, self.dnum))
 
-		self.damage_coefs[:, :, -1,  -1] = self.d[-1, :, :]
-		self.damage_coefs[:, :, -1,  -2] = (self.d[-2, :, :] - self.d[-1, :, :]) / self.emit_pct[-2]
+		self.damage_coefs[:, :, -1,  -1] = self.d_rcomb[-1, :, :]
+		self.damage_coefs[:, :, -1,  -2] = (self.d_rcomb[-2, :, :] - self.d_rcomb[-1, :, :]) / self.emit_pct[-2]
 		amat[:, 0, 0] = 2.0 * self.emit_pct[-2]
 		amat[:, 1:, 0] = self.emit_pct[:-1]**2
 		amat[:, 1:, 1] = self.emit_pct[:-1]
@@ -160,7 +164,7 @@ class DLWDamage(Damage):
 
 		for state in range(0, self.tree.num_final_states):
 			bmat[:, 0] = self.damage_coefs[state, :, -1,  -2] * self.emit_pct[-2]
-			bmat[:, 1:] = self.d[:-1, state, :].T
+			bmat[:, 1:] = self.d_rcomb[:-1, state, :].T
 			self.damage_coefs[state, :, 0] = np.linalg.solve(amat, bmat)
 
 	def import_damages(self, file_name="simulated_damages"):
@@ -188,6 +192,7 @@ class DLWDamage(Damage):
 
 		n = self.tree.num_final_states	
 		self.d = np.array([d[n*i:n*(i+1)] for i in range(0, self.dnum)])
+		self._damage_interpolation()
 
 	def damage_simulation(self, draws, peak_temp=9.0, disaster_tail=12.0, tip_on=True, 
 		temp_map=1, temp_dist_params=None, maxh=100.0, save_simulation=True):
@@ -199,31 +204,31 @@ class DLWDamage(Damage):
 			number of Monte Carlo draws
 		peak_temp : float, optional 
 			tipping point parameter 
-	    disaster_tail : float, optional
-	    	curvature of tipping point
-	    tip_on : bool, optional
-	    	flag that turns tipping points on or off
-	    temp_map : int, optional
-	    	mapping from GHG to temperature
-	            * 0: implies Pindyck displace gamma
-	            * 1: implies Wagner-Weitzman normal
-	            * 2: implies Roe-Baker
-	            * 3: implies user-defined normal 
-	            * 4: implies user-defined gamma
-	    temp_dist_params : ndarray or list, optional
-	    	if temp_map is either 3 or 4, user needs to define the distribution parameters
-	    maxh : float, optional
-	    	time paramter from Pindyck which indicates the time it takes for temp to get half 
-	            way to its max value for a given level of ghg
-	    cons_growth : float, optional 
-	    	yearly growth in consumption
-	    save_simulation : bool, optional
-	    	True if simulated values should be save, False otherwise
-		
-	    Returns
-	    -------
-	    ndarray
-	    	simulated damages
+		disaster_tail : float, optional
+			curvature of tipping point
+		tip_on : bool, optional
+			flag that turns tipping points on or off
+		temp_map : int, optional
+			mapping from GHG to temperature
+		        * 0: implies Pindyck displace gamma
+		        * 1: implies Wagner-Weitzman normal
+		        * 2: implies Roe-Baker
+		        * 3: implies user-defined normal 
+		        * 4: implies user-defined gamma
+		temp_dist_params : ndarray or list, optional
+			if temp_map is either 3 or 4, user needs to define the distribution parameters
+		maxh : float, optional
+			time paramter from Pindyck which indicates the time it takes for temp to get half 
+		        way to its max value for a given level of ghg
+		cons_growth : float, optional 
+			yearly growth in consumption
+		save_simulation : bool, optional
+			True if simulated values should be save, False otherwise
+
+		Returns
+		-------
+		ndarray
+			simulated damages
 
 		"""
 		ds = DamageSimulation(tree=self.tree, ghg_levels=self.ghg_levels, peak_temp=peak_temp,
@@ -232,6 +237,7 @@ class DLWDamage(Damage):
 		print("Starting damage simulation..")
 		self.d = ds.simulate(draws, write_to_file = save_simulation)
 		print("Done!")
+		self._damage_interpolation()
 		return self.d
 
 	def _forcing_based_mitigation(self, forcing, period): 
