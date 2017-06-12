@@ -417,11 +417,11 @@ class DLWDamage(Damage):
 			damage = 0.0
 			i = 0
 			for state in range(worst_end_state, best_end_state+1): 
-				if self.d[0, state, period-1] > 1e-5:
+				if self.d_rcomb[0, state, period-1] > 1e-5:
 					deriv = 2.0 * self.damage_coefs[state, period-1, 0, 0]*self.emit_pct[0] \
 							+ self.damage_coefs[state, period-1, 0, 1]
-					decay_scale = deriv / (self.d[0, state, period-1]*np.log(0.5))
-					dist = force_mitigation - self.emit_pct[0] + np.log(self.d[0, state, period-1]) \
+					decay_scale = deriv / (self.d_rcomb[0, state, period-1]*np.log(0.5))
+					dist = force_mitigation - self.emit_pct[0] + np.log(self.d_rcomb[0, state, period-1]) \
 						   / (np.log(0.5) * decay_scale) 
 					damage += probs[i] * (0.5**(decay_scale*dist) * np.exp(-np.square(force_mitigation-self.emit_pct[0])/60.0))
 				i += 1
