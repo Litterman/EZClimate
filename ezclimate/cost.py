@@ -100,21 +100,26 @@ class DLWCost(Cost):
 
 		Returns
 		-------
-		ndarray 
+		ndarray :
 			cost
 
 		"""		
+                if mitigation.min() < 0.0:
+                        m0 = np.maximum(mitigation,0.)
+                else:
+                        m0 = mitigation
+                
 		years = self.tree.decision_times[period]
 		tech_term = (1.0 - ((self.tech_const + self.tech_scale*ave_mitigation) / 100.0))**years
-		cbs = self.g * (mitigation**self.a) 
-		bool_arr = (mitigation < self.cbs_level).astype(int)
+		cbs = self.g * (m0**self.a) 
+		bool_arr = (m0 < self.cbs_level).astype(int)
 		if np.all(bool_arr):
 			c = (cbs * tech_term) / self.cons_per_ton 
 		else:
 			base_cbs = self.g * self.cbs_level**self.a
-			bool_arr2 = (mitigation > self.cbs_level).astype(int)
-			extension = ((mitigation-self.cbs_level) * self.max_price 
-						- self.cbs_b*mitigation * (self.cbs_k/mitigation)**(1.0/self.cbs_b) / (self.cbs_b-1.0)
+			bool_arr2 = (m0 > self.cbs_level).astype(int)
+			extension = ((m0-self.cbs_level) * self.max_price 
+						- self.cbs_b*m0 * (self.cbs_k/m0)**(1.0/self.cbs_b) / (self.cbs_b-1.0)
 						+ self.cbs_b*self.cbs_level * (self.cbs_k/self.cbs_level)**(1.0/self.cbs_b) / (self.cbs_b-1.0))
 			
 			c = (cbs * bool_arr + (base_cbs + extension)*bool_arr2) * tech_term / self.cons_per_ton
