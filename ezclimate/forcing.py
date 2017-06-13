@@ -33,11 +33,14 @@ class Forcing(object):
 	forcing_p1 = 0.13173
 	forcing_p2 = 0.607773
 	forcing_p3 = 315.3785
+        forcing_log_p1 = 5.35067129
+        forcing_log_p2 = np.log(278.06340701)
+        forcing_flag = 'log' # log or power
 	absorbtion_p1 = 0.94835
 	absorbtion_p2 = 0.741547
 	lsc_p1 = 285.6268
 	lsc_p2 = 0.88414
-
+        
 	@classmethod
 	def forcing_and_ghg_at_node(cls, m, node, tree, bau, subinterval_len, returning="forcing"):
 		"""Calculates the radiative forcing based on GHG evolution leading up to the 
@@ -102,7 +105,18 @@ class Forcing(object):
 				lsc = cls.lsc_p1 + cls.lsc_p2 * cum_sink
 				absorbtion = 0.5 * cls.absorbtion_p1 * np.sign(ghg_level-lsc) * np.abs(ghg_level-lsc)**cls.absorbtion_p2
 				cum_sink += absorbtion
-				cum_forcing += cls.forcing_p1*np.sign(ghg_level-cls.forcing_p3)*np.abs(ghg_level-cls.forcing_p3)**cls.forcing_p2
+				#cum_forcing += cls.forcing_p1*np.sign(ghg_level-cls.forcing_p3)*np.abs(ghg_level-cls.forcing_p3)**cls.forcing_p2
+                                power_forcing = cls.forcing_p1*np.sign(ghg_level-cls.forcing_p3)*np.abs(ghg_level-cls.forcing_p3)**cls.forcing_p2
+                                if ghg_level > 100.:
+                                        log_forcing = cls.forcing_log_p1*(np.log(ghg_level)-cls.forcing_log_p2)
+                                else:
+                                        b = cls.forcing_log_p1*(np.log(100.)-cls.forcing_log_p2)
+                                        m = cls.forcing_log_p1/100.
+                                        log_forcing = b + m*(ghg_level-100.)
+                                if forcing_flag == 'log':
+				        cum_forcing += log_forcing
+                                elif forcing_flag == 'power':
+                                        cum_forcing += power_forcing
 				ghg_level += add_p_ppm - absorbtion
 
 		if returning == "forcing":
