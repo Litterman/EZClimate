@@ -237,7 +237,7 @@ def find_bec(m, utility, constraint_cost, a=-0.1, b=1.5):
 
 	return brentq(min_func, a, b)
 
-def perpetuity_yield(price, start_date, a=0.1, b=20.0):
+def perpetuity_yield(price, start_date, a=0.1, b=1000.0):
 	"""Find the yield of a perpetuity starting at year `start_date`.
 
 	Parameters
