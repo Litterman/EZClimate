@@ -5,7 +5,7 @@ from storage_tree import BigStorageTree, SmallStorageTree
 from optimization import GeneticAlgorithm, GradientSearch
 from tools import write_columns_csv, append_to_existing, import_csv
 
-
+                        
 def additional_ghg_emission(m, utility):
 	"""Calculate the emission added by every node.
 
@@ -113,17 +113,46 @@ def constraint_first_period(utility, first_node, m_size):
 	"""
 	fixed_values = np.array([first_node])
 	fixed_indicies = np.array([0])
-	ga_model = GeneticAlgorithm(pop_amount=150, num_generations=100, cx_prob=0.8, mut_prob=0.5, bound=1.5,
-								num_feature=m_size, utility=utility, fixed_values=fixed_values, 
-								fixed_indicies=fixed_indicies, print_progress=True)
+	ga_model = GeneticAlgorithm(pop_amount=400, num_generations=200, cx_prob=0.8, mut_prob=0.5, bound=1.5,
+				num_feature=m_size, utility=utility, fixed_values=fixed_values, 
+				fixed_indicies=fixed_indicies, print_progress=True)
 
 	gs_model = GradientSearch(var_nums=m_size, utility=utility, accuracy=1e-7,
-							  iterations=250, fixed_values=fixed_values, fixed_indicies=fixed_indicies, 
-							  print_progress=True)
+				iterations=200, fixed_values=fixed_values, fixed_indicies=fixed_indicies, 
+                                print_progress=True)
 
 	final_pop, fitness = ga_model.run()
 	sort_pop = final_pop[np.argsort(fitness)][::-1]
 	new_m, new_utility = gs_model.run(initial_point_list=sort_pop, topk=1)
+
+	print("SCC and Utility after constrained gs: {}, {}".format(new_m[0], new_utility))  
+
+        """
+        u_f_calls=0
+        
+        def new_iu(m):
+                global u_f_calls
+                uu = -1.*utility.utility(m,return_trees=False)
+                u_f_calls += 1
+                if u_f_calls%500 == 0:
+                        print(u_f_calls, uu[0], m)
+                return uu
+        """
+        u_f_calls = [0]
+
+	def new_iu(m):
+                uu = -1.*utility.utility(m, return_trees=False)
+		u_f_calls[0] += 1
+		if u_f_calls[0]%500 == 0:
+			print(u_f_calls[0], uu[0], m)
+		return uu
+         
+	from scipy.optimize import fmin as fmin
+	newfmin_out = fmin(new_iu, new_m, xtol=5.e-5,maxfun=10**5,maxiter=2*(10**5),full_output=True)
+    
+	new_m = newfmin_out[0]
+	new_utility = -1.0*newfmin_out[1]
+
 	return new_m
 
 def find_ir(m, utility, payment, a=0.0, b=1.0): 
@@ -202,7 +231,7 @@ def find_term_structure(m, utility, payment, a=0.0, b=1.5):
 
 	return brentq(min_func, a, b)
 
-def find_bec(m, utility, constraint_cost, a=-0.1, b=1.5):
+def find_bec(m, utility, constraint_cost, a=-150, b=150):
 	"""Used to find a value for consumption that equalizes utility at time 0 in two different solutions.
 
 	Parameters
@@ -237,7 +266,7 @@ def find_bec(m, utility, constraint_cost, a=-0.1, b=1.5):
 
 	return brentq(min_func, a, b)
 
-def perpetuity_yield(price, start_date, a=0.1, b=1000.0):
+def perpetuity_yield(price, start_date, a=0.1, b=100000):
 	"""Find the yield of a perpetuity starting at year `start_date`.
 
 	Parameters
