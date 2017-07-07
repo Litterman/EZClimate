@@ -112,17 +112,18 @@ class DLWCost(Cost):
 		years = self.tree.decision_times[period]
 		tech_term = (1.0 - ((self.tech_const + self.tech_scale*ave_mitigation) / 100.0))**years
 		cbs = self.g * (m0**self.a) 
-		bool_arr = (m0 < self.cbs_level).astype(int)
+		bool_arr = (m0 <= self.cbs_level).astype(int)
 		if np.all(bool_arr):
 			c = (cbs * tech_term) / self.cons_per_ton 
 		else:
-			base_cbs = self.g * self.cbs_level**self.a
-			bool_arr2 = (m0 > self.cbs_level).astype(int)
-			extension = ((m0-self.cbs_level) * self.max_price 
-						- self.cbs_b*m0 * (self.cbs_k/m0)**(1.0/self.cbs_b) / (self.cbs_b-1.0)
+                        ixhigh = np.where(m0 > self.cbs_level)
+                        mbig=m0[ixhigh]
+                        ctmp=cbs
+			extension = ((mbig-self.cbs_level) * self.max_price 
+						- (self.cbs_b/(self.cbs_b-1.0)) *mbig*(self.cbs_k/mbig)**(1.0/self.cbs_b) 
 						+ self.cbs_b*self.cbs_level * (self.cbs_k/self.cbs_level)**(1.0/self.cbs_b) / (self.cbs_b-1.0))
-			
-			c = (cbs * bool_arr + (base_cbs + extension)*bool_arr2) * tech_term / self.cons_per_ton
+			ctmp[ixhigh] = (self.g * self.cbs_level**self.a) + extension
+			c = ctmp * tech_term / self.cons_per_ton
 		return c
 	
 	def price(self, years, mitigation, ave_mitigation):
