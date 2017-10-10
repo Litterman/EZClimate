@@ -16,7 +16,7 @@ from ezclimate.damage import DLWDamage
 
 df = DLWDamage(tree=t, bau=bau_default_model, cons_growth=0.015, ghg_levels=[450, 650, 1000], subinterval_len=5)
 df.damage_simulation(draws=4000000, peak_temp=6.0, disaster_tail=18.0, tip_on=True, 
-                     temp_map=1, temp_dist_params=None, maxh=100.0, cons_growth=0.015)
+                     temp_map=1, temp_dist_params=None, maxh=100.0)
 
 from ezclimate.utility import EZUtility
 
