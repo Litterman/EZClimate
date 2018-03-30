@@ -127,7 +127,7 @@ class DLWBusinessAsUsual(BusinessAsUsual):
 
         for n in range(1, num_periods):
             self.emission_by_decisions[n] = self.emission_by_time(tree.decision_times[n])
-            self.emission_per_period[n] = period_len[n] * (self.emission_by_decisions[n-1:n].mean())
+            self.emission_per_period[n] = period_len[n-1] * (self.emission_by_decisions[n-1:n].mean())
 
         #the total increase in ghg level of 600 (from 400 to 1000) in the bau path is allocated over time
         self.emission_to_ghg = (self.ghg_end - self.ghg_start) * self.emission_per_period / self.emission_per_period.sum()
