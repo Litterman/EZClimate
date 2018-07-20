@@ -213,7 +213,7 @@ class BaseStorageTree(object):
 			write_columns_csv(lst=[output_lst], file_name=file_name, header=["Year", "Node", header], 
 							  index=[years, nodes], delimiter=delimiter)
 
-	def write_columns_existing(self, file_name, header, delimiter=";"):
+	def write_columns_existing(self, file_name, header):
 		"""Save values in `tree` as columns into file  `file_name` in the 
 		'data' directory in the current working directory, when `file_name` already exists. 
 		If there is no 'data' directory, one is created. 

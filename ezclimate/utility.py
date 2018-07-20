@@ -322,7 +322,7 @@ class EZUtility(object):
 		     * prev_cons**self.r + self.b * ce_term)**((1.0/self.r)-1.0)
 		return t1 * t2
 
-	def _period_marginal_utility(self, prev_mu_0, prev_mu_1, m, period, utility_tree, cons_tree, ce_tree):
+	def _period_marginal_utility(self, period, utility_tree, cons_tree, ce_tree):
 		"""Marginal utility for each node in a period."""
 		damage_period = utility_tree.between_decision_times(period)
 		mu_0 = self._mu_0(cons_tree[period], ce_tree[period])
