@@ -11,6 +11,8 @@ See the [EZ-Climate User's Guide](https://oscarsjogren.github.io/dlw/) for EZ-Cl
 
 In order to get the tip documentation, change directory to the `docs` subfolder and type in `make html`, the documentation will be under `../../ez_climate_docs/html`. You will need [Sphinx](http://sphinx.pocoo.org) to build the documentation.
 
+See [Applying Asset Pricing Theory to Calibrate the Price of Climate Risk](https://gwagner.com/daniel-litterman-wagner-applying-asset-pricing-theory-to-calibrate-the-price-of-climate-risk/) for the latest working paper employing this code.
+
 ## Installation
 
 We encourage you to use pip to install ezclimate on your system. 

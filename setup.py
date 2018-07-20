@@ -18,7 +18,7 @@ setup(name='ezclimate',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.4'
       ],
-      keywords='EZ-climate, social cost of carbon, SCC, climate pricing',
+      keywords='EZ-climate, optimal carbon price, CO2 tax, social cost of carbon, SCC, climate pricing',
       url='http://github.com/Litterman/EZClimate',
       author='Robert Litterman, Kent Daniel, Gernot Wagner',
       license='MIT',
