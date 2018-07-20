@@ -190,7 +190,7 @@ class EZUtility(object):
 		ndarray or tuple 
 			tuple of `BaseStorageTree` if return_trees else ndarray with utility at period 0
 
-		Examples:
+		Examples
 		---------
 		Assuming we have declared a EZUtility object as 'ezu' and have a mitigation array 'm'
 		
@@ -370,7 +370,7 @@ class EZUtility(object):
 		Examples
 		--------
 		Assuming we have declared a EZUtility object as 'ezu' and have a mitigation array 'm'.
-		>>> 
+		
 		>>> utility_tree, cons_tree, cost_tree, ce_tree = ezu.utility(m, return_trees=True)
 		>>> mu_0_tree, mu_1_tree, mu_2_tree = ezu.marginal_utility(m, utility_tree, cons_tree, cost_tree, ce_tree)
 		>>> mu_0_tree[0] # value at period 0
