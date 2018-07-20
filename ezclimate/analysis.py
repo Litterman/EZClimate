@@ -445,7 +445,7 @@ class RiskDecomposition(object):
 		SDF for each node
 	expected_damages : ndarray
 		expected damages in each period
-	risk_premium : ndarray
+	risk_premiums : ndarray
 		risk premium in each period
 	expected_sdf : ndarray
 		expected SDF in each period
@@ -495,10 +495,6 @@ class RiskDecomposition(object):
 		----------
 		m : ndarray or list
 			array of mitigation
-		utility : `Utility` object
-			object of utility class
-		prefix : str, optional
-			prefix to be added to file_name
 
 		"""
 

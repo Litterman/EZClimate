@@ -355,6 +355,8 @@ class GradientSearch(object) :
 		number of elements in array to optimize
 	accuracy : float
 		stop value for the gradient descent
+	iterations : int
+		maximum number of iterations
 	fixed_values : ndarray, optional
 		nodes to keep fixed
 	fixed_indices : ndarray, optional
@@ -374,6 +376,8 @@ class GradientSearch(object) :
 		number of elements in array to optimize
 	accuracy : float
 		stop value for the gradient descent
+	iterations : int
+		maximum number of iterations
 	fixed_values : ndarray, optional
 		nodes to keep fixed
 	fixed_indices : ndarray, optional

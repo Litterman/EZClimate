@@ -232,8 +232,6 @@ class BaseStorageTree(object):
 			name of saved file
 		header : str
 			description of values in tree
-		start_year : int, optional
-			start year of analysis
 		delimiter : str, optional
 			delimiter in file
 
@@ -329,7 +327,7 @@ class BigStorageTree(BaseStorageTree):
 
 	Parameters
 	----------
-	subintervals_len : float
+	subinterval_len : float
 		years between periods in tree
 	decision_times : ndarray or list
 		array of years from start where decisions about mitigation levels are done
@@ -344,7 +342,7 @@ class BigStorageTree(BaseStorageTree):
 		periods in the tree
 	tree : dict
 		dictionary where keys are `periods` and values are nodes in period
-	subintervals_len : float
+	subinterval_len : float
 		years between periods in tree
 
 	"""
