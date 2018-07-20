@@ -26,7 +26,7 @@ class DLWCost(Cost):
 	emit_at_0 : float
 		initial GHG emission level
 	g : float
-		intital scale of the cost function
+		initial scale of the cost function
 	a : float
 		curvature of the cost function
 	join_price : float
@@ -39,14 +39,14 @@ class DLWCost(Cost):
 	tech_scale : float
 		determines the sensitivity of technological change to previous mitigation
 	cons_at_0 : float 
-		intital consumption. Default $30460bn based on US 2010 values.
+		initial consumption. Default $30460bn based on US 2010 values.
 
 	Attributes
 	----------
 	tree : `TreeModel` object
 		tree structure used
 	g : float
-		intital scale of the cost function
+		initial scale of the cost function
 	a : float
 		curvature of the cost function
 	max_price : float
@@ -57,7 +57,7 @@ class DLWCost(Cost):
 	tech_scale : float
 		determines the sensitivity of technological change to previous mitigation
 	cons_at_0 : float 
-		intital consumption. Default $30460bn based on US 2010 values.
+		initial consumption. Default $30460bn based on US 2010 values.
 	cbs_level : float
 		constant 
 	cbs_deriv : float

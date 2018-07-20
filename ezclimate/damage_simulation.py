@@ -75,7 +75,7 @@ class DamageSimulation(object):
     temp_dist_params : ndarray or list
         if temp_map is either 3 or 4, user needs to define the distribution parameters
     maxh : float
-        time paramter from Pindyck which indicates the time it takes for temp to get half 
+        time parameter from Pindyck which indicates the time it takes for temp to get half
         way to its max value for a given level of ghg
     cons_growth : float 
         yearly growth in consumption

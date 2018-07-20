@@ -141,7 +141,7 @@ class DLWDamage(Damage):
 				self.tree.node_prob[node] = self.tree.final_states_prob[worst_end_state:best_end_state+1].sum()
 
 	def _damage_interpolation(self):
-		"""Create the interpolation coeffiecients used in `damage_function`."""
+		"""Create the interpolation coefficients used in `damage_function`."""
 		if self.d is None:
 			print("Importing stored damage simulation")
 			self.import_damages()
@@ -196,7 +196,7 @@ class DLWDamage(Damage):
 
 	def damage_simulation(self, draws, peak_temp=9.0, disaster_tail=12.0, tip_on=True, 
 		temp_map=1, temp_dist_params=None, maxh=100.0, save_simulation=True):
-		"""Initializion and simulation of damages, given by :mod:`ez_climate.DamageSimulation`.
+		"""Initialization and simulation of damages, given by :mod:`ez_climate.DamageSimulation`.
 
 		Parameters
 		----------
@@ -218,7 +218,7 @@ class DLWDamage(Damage):
 		temp_dist_params : ndarray or list, optional
 			if temp_map is either 3 or 4, user needs to define the distribution parameters
 		maxh : float, optional
-			time paramter from Pindyck which indicates the time it takes for temp to get half 
+			time parameter from Pindyck which indicates the time it takes for temp to get half
 		        way to its max value for a given level of ghg
 		cons_growth : float, optional 
 			yearly growth in consumption

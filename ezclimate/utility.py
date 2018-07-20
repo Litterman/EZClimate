@@ -18,7 +18,7 @@ class EZUtility(object):
 	damage : `Damage` object
 		class that provides damage methods
 	cost : `Cost` object
-		class that procides cost methods
+		class that provides cost methods
 	period_len : float
 		subinterval length
 	eis : float, optional
@@ -36,7 +36,7 @@ class EZUtility(object):
 	damage : `Damage` object
 		class that provides damage methods
 	cost : `Cost` object
-		class that procides cost methods
+		class that provides cost methods
 	period_len : float
 		subinterval length
 	decision_times : ndarray 
@@ -105,7 +105,7 @@ class EZUtility(object):
 		
 
 	def _certain_equivalence(self, period, damage_period, utility_tree):
-		"""Caclulate certainty equivalence utility. If we are between decision nodes, i.e. no branching,
+		"""Calculate certainty equivalence utility. If we are between decision nodes, i.e. no branching,
 		then certainty equivalent utility at time period depends only on the utility next period 
 		given information known today. Otherwise the certainty equivalent utility is the ability 
 		weighted sum of next period utility over the partition reachable from the state.
@@ -183,7 +183,7 @@ class EZUtility(object):
 		m : ndarray or list
 			array of mitigations
 		return_trees : bool
-			True if methid should return trees calculated in producing the utility
+			True if method should return trees calculated in producing the utility
 
 		Returns
 		-------
@@ -232,7 +232,7 @@ class EZUtility(object):
 		first_period_consadj : float, optional 
 			value to increase consumption at period 0 by
 		return_trees : bool, optional 
-			True if method should return trees calculculated in producing the utility
+			True if method should return trees calculated in producing the utility
 
 		Returns
 		-------
