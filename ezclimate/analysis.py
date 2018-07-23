@@ -114,12 +114,12 @@ def constraint_first_period(utility, first_node, m_size):
 	fixed_values = np.array([first_node])
 	fixed_indicies = np.array([0])
 	ga_model = GeneticAlgorithm(pop_amount=400, num_generations=200, cx_prob=0.8, mut_prob=0.5, bound=1.5,
-				num_feature=m_size, utility=utility, fixed_values=fixed_values, 
-				fixed_indicies=fixed_indicies, print_progress=True)
+                                num_feature=m_size, utility=utility, fixed_values=fixed_values,
+                                fixed_indices=fixed_indicies, print_progress=True)
 
 	gs_model = GradientSearch(var_nums=m_size, utility=utility, accuracy=1e-7,
-				iterations=200, fixed_values=fixed_values, fixed_indicies=fixed_indicies, 
-                                print_progress=True)
+							  iterations=200, fixed_values=fixed_values, fixed_indices=fixed_indicies,
+							  print_progress=True)
 
 	final_pop, fitness = ga_model.run()
 	sort_pop = final_pop[np.argsort(fitness)][::-1]
@@ -445,7 +445,7 @@ class RiskDecomposition(object):
 		SDF for each node
 	expected_damages : ndarray
 		expected damages in each period
-	risk_premium : ndarray
+	risk_premiums : ndarray
 		risk premium in each period
 	expected_sdf : ndarray
 		expected SDF in each period
@@ -495,10 +495,6 @@ class RiskDecomposition(object):
 		----------
 		m : ndarray or list
 			array of mitigation
-		utility : `Utility` object
-			object of utility class
-		prefix : str, optional
-			prefix to be added to file_name
 
 		"""
 

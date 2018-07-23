@@ -18,7 +18,7 @@ class EZUtility(object):
 	damage : `Damage` object
 		class that provides damage methods
 	cost : `Cost` object
-		class that procides cost methods
+		class that provides cost methods
 	period_len : float
 		subinterval length
 	eis : float, optional
@@ -36,7 +36,7 @@ class EZUtility(object):
 	damage : `Damage` object
 		class that provides damage methods
 	cost : `Cost` object
-		class that procides cost methods
+		class that provides cost methods
 	period_len : float
 		subinterval length
 	decision_times : ndarray 
@@ -105,7 +105,7 @@ class EZUtility(object):
 		
 
 	def _certain_equivalence(self, period, damage_period, utility_tree):
-		"""Caclulate certainty equivalence utility. If we are between decision nodes, i.e. no branching,
+		"""Calculate certainty equivalence utility. If we are between decision nodes, i.e. no branching,
 		then certainty equivalent utility at time period depends only on the utility next period 
 		given information known today. Otherwise the certainty equivalent utility is the ability 
 		weighted sum of next period utility over the partition reachable from the state.
@@ -183,14 +183,14 @@ class EZUtility(object):
 		m : ndarray or list
 			array of mitigations
 		return_trees : bool
-			True if methid should return trees calculated in producing the utility
+			True if method should return trees calculated in producing the utility
 
 		Returns
 		-------
 		ndarray or tuple 
 			tuple of `BaseStorageTree` if return_trees else ndarray with utility at period 0
 
-		Examples:
+		Examples
 		---------
 		Assuming we have declared a EZUtility object as 'ezu' and have a mitigation array 'm'
 		
@@ -232,7 +232,7 @@ class EZUtility(object):
 		first_period_consadj : float, optional 
 			value to increase consumption at period 0 by
 		return_trees : bool, optional 
-			True if method should return trees calculculated in producing the utility
+			True if method should return trees calculated in producing the utility
 
 		Returns
 		-------
@@ -322,7 +322,7 @@ class EZUtility(object):
 		     * prev_cons**self.r + self.b * ce_term)**((1.0/self.r)-1.0)
 		return t1 * t2
 
-	def _period_marginal_utility(self, prev_mu_0, prev_mu_1, m, period, utility_tree, cons_tree, ce_tree):
+	def _period_marginal_utility(self, period, utility_tree, cons_tree, ce_tree):
 		"""Marginal utility for each node in a period."""
 		damage_period = utility_tree.between_decision_times(period)
 		mu_0 = self._mu_0(cons_tree[period], ce_tree[period])
@@ -370,7 +370,7 @@ class EZUtility(object):
 		Examples
 		--------
 		Assuming we have declared a EZUtility object as 'ezu' and have a mitigation array 'm'.
-		>>> 
+		
 		>>> utility_tree, cons_tree, cost_tree, ce_tree = ezu.utility(m, return_trees=True)
 		>>> mu_0_tree, mu_1_tree, mu_2_tree = ezu.marginal_utility(m, utility_tree, cons_tree, cost_tree, ce_tree)
 		>>> mu_0_tree[0] # value at period 0

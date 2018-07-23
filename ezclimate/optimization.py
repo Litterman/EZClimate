@@ -31,8 +31,8 @@ class GeneticAlgorithm(object):
 		object of utility class
 	fixed_values : ndarray, optional
 		nodes to keep fixed
-	fixed_indicies : ndarray, optional
-		indicies of nodes to keep fixed
+	fixed_indices : ndarray, optional
+		indices of nodes to keep fixed
 	print_progress : bool, optional
 		if the progress of the evolution should be printed
 
@@ -54,14 +54,14 @@ class GeneticAlgorithm(object):
 		object of utility class
 	fixed_values : ndarray, optional
 		nodes to keep fixed
-	fixed_indicies : ndarray, optional
-		indicies of nodes to keep fixed
+	fixed_indices : ndarray, optional
+		indices of nodes to keep fixed
 	print_progress : bool, optional
 		if the progress of the evolution should be printed
 
 	"""
 	def __init__(self, pop_amount, num_generations, cx_prob, mut_prob, bound, num_feature, utility,
-				 fixed_values=None, fixed_indicies=None, print_progress=False):
+				 fixed_values=None, fixed_indices=None, print_progress=False):
 		self.num_feature = num_feature
 		self.pop_amount = pop_amount
 		self.num_gen = num_generations
@@ -70,7 +70,7 @@ class GeneticAlgorithm(object):
 		self.u = utility
 		self.bound = bound
 		self.fixed_values = fixed_values
-		self.fixed_indicies = fixed_indicies
+		self.fixed_indices = fixed_indices
 		self.print_progress = print_progress
 
 	def _generate_population(self, size):
@@ -78,7 +78,7 @@ class GeneticAlgorithm(object):
 		pop = np.random.random([size, self.num_feature])*self.bound
 		if self.fixed_values is not None:
 			for ind in pop:
-				ind[self.fixed_indicies] = self.fixed_values
+				ind[self.fixed_indices] = self.fixed_values
 		return pop
 
 	def _evaluate(self, indvidual):
@@ -175,8 +175,8 @@ class GeneticAlgorithm(object):
 				child1[cxpoint1:cxpoint2], child2[cxpoint1:cxpoint2] \
 				= child2[cxpoint1:cxpoint2].copy(), child1[cxpoint1:cxpoint2].copy()
 				if self.fixed_values is not None:
-					child1[self.fixed_indicies] = self.fixed_values
-					child2[self.fixed_indicies] = self.fixed_values
+					child1[self.fixed_indices] = self.fixed_values
+					child2[self.fixed_indices] = self.fixed_values
 	
 	def _uniform_cross_over(self, pop, ind_prob):
 		"""Performs a uniform cross-over of the population.
@@ -199,7 +199,7 @@ class GeneticAlgorithm(object):
 
 	def _mutate(self, pop, ind_prob, scale=2.0):
 		"""Mutates individual's elements. The individual has a probability of `mut_prob` of 
-		beeing selected and every element in this individual has a probability `ind_prob` of beeing 
+		being selected and every element in this individual has a probability `ind_prob` of being
 		mutated. The mutated value is a random number.
 
 		Parameters
@@ -217,14 +217,14 @@ class GeneticAlgorithm(object):
 		for i in mutate_index:
 			feature_index = np.random.choice(self.num_feature, int(ind_prob * self.num_feature), replace=False)
 			for j in feature_index:
-				if self.fixed_indicies is not None and j in self.fixed_indicies:
+				if self.fixed_indices is not None and j in self.fixed_indices:
 					continue
 				else:
 					pop[i][j] = max(0.0, pop[i][j]+(np.random.random()-0.5)*scale)
 	
 	def _uniform_mutation(self, pop, ind_prob, scale=2.0):
 		"""Mutates individual's elements. The individual has a probability of `mut_prob` of
-		beeing selected and every element in this individual has a probability `ind_prob` of beeing 
+		being selected and every element in this individual has a probability `ind_prob` of being
 		mutated. The mutated value is the current value plus a scaled uniform [-0.5,0.5] random value.
 
 		Parameters
@@ -245,7 +245,7 @@ class GeneticAlgorithm(object):
 			pop[i] += (prob > (1.0-ind_prob)).astype(int)*inc
 			pop[i] = np.maximum(1e-5, pop[i])
 			if self.fixed_values is not None:
-				pop[i][self.fixed_indicies] = self.fixed_values
+				pop[i][self.fixed_indices] = self.fixed_values
 
 	def _show_evolution(self, fits, pop):
 		"""Print statistics of the evolution of the population."""
@@ -355,10 +355,12 @@ class GradientSearch(object) :
 		number of elements in array to optimize
 	accuracy : float
 		stop value for the gradient descent
+	iterations : int
+		maximum number of iterations
 	fixed_values : ndarray, optional
 		nodes to keep fixed
-	fixed_indicies : ndarray, optional
-		indicies of nodes to keep fixed
+	fixed_indices : ndarray, optional
+		indices of nodes to keep fixed
 	print_progress : bool, optional
 		if the progress of the evolution should be printed
 	scale_alpha : ndarray, optional
@@ -374,10 +376,12 @@ class GradientSearch(object) :
 		number of elements in array to optimize
 	accuracy : float
 		stop value for the gradient descent
+	iterations : int
+		maximum number of iterations
 	fixed_values : ndarray, optional
 		nodes to keep fixed
-	fixed_indicies : ndarray, optional
-		indicies of nodes to keep fixed
+	fixed_indices : ndarray, optional
+		indices of nodes to keep fixed
 	print_progress : bool, optional
 		if the progress of the evolution should be printed
 	scale_alpha : ndarray, optional
@@ -385,14 +389,14 @@ class GradientSearch(object) :
 
 	"""
 
-	def __init__(self, utility, var_nums, accuracy=1e-06, iterations=100, fixed_values=None, 
-		        fixed_indicies=None, print_progress=False, scale_alpha=None):
+	def __init__(self, utility, var_nums, accuracy=1e-06, iterations=100, fixed_values=None,
+				 fixed_indices=None, print_progress=False, scale_alpha=None):
 		self.u = utility
 		self.var_nums = var_nums
 		self.accuracy = accuracy
 		self.iterations = iterations
 		self.fixed_values  = fixed_values
-		self.fixed_indicies = fixed_indicies
+		self.fixed_indices = fixed_indices
 		self.print_progress = print_progress
 		self.scale_alpha = scale_alpha
 		if scale_alpha is None:
@@ -408,7 +412,7 @@ class GradientSearch(object) :
 		grad = (plus_utility-minus_utility) / (2*self.delta)
 		return grad, i
 
-	def numerical_gradient(self, m, delta=1e-08, fixed_indicies=None):
+	def numerical_gradient(self, m, delta=1e-08, fixed_indices=None):
 		"""Calculate utility gradient numerically.
 
 		Parameters
@@ -417,8 +421,8 @@ class GradientSearch(object) :
 			array of mitigation
 		delta : float, optional
 			change in mitigation 
-		fixed_indicies : ndarray or list, optional
-			indicies of gradient that should not be calculated
+		fixed_indices : ndarray or list, optional
+			indices of gradient that should not be calculated
 
 		Returns
 		-------
@@ -428,14 +432,14 @@ class GradientSearch(object) :
 		"""
 		self.delta = delta
 		self.m = m
-		if fixed_indicies is None:
-			fixed_indicies = []
+		if fixed_indices is None:
+			fixed_indices = []
 		grad = np.zeros(len(m))
 		if not isinstance(m, np.ndarray):
 			self.m = np.array(m)
 		pool = multiprocessing.Pool()
-		indicies = np.delete(range(len(m)), fixed_indicies)
-		res = pool.map(self._partial_grad, indicies)
+		indices = np.delete(range(len(m)), fixed_indices)
+		res = pool.map(self._partial_grad, indices)
 		for g, i in res:
 			grad[i] = g
 		pool.close()
@@ -488,7 +492,7 @@ class GradientSearch(object) :
 		accelerator = np.ones(self.var_nums)
 
 		for i in range(self.iterations):
-			grad = self.numerical_gradient(x_hist[i], fixed_indicies=self.fixed_indicies)
+			grad = self.numerical_gradient(x_hist[i], fixed_indices=self.fixed_indices)
 			m_t = beta1*m_t + (1-beta1)*grad
 			v_t = beta2*v_t + (1-beta2)*np.power(grad, 2) 
 			m_hat = m_t / (1-beta1**(i+1))
@@ -500,7 +504,7 @@ class GradientSearch(object) :
 			new_x[new_x < 0] = 0.0
 
 			if self.fixed_values is not None:
-				new_x[self.fixed_indicies] = self.fixed_values
+				new_x[self.fixed_indices] = self.fixed_values
 
 			x_hist[i+1] = new_x
 			u_hist[i+1] = self.u.utility(new_x)[0]

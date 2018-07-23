@@ -18,10 +18,10 @@ class Forcing(object):
 		forcing constant 
 	forcing_p3 : float
 		forcing constant
-	absorbtion_p1 : float
-		absorbtion constant
-	absorbtion_p2 : float 
-		absorbtion constant
+	absorption_p1 : float
+		absorption constant
+	absorption_p2 : float
+		absorption constant
 	lsc_p1 : float
 		class constant
 	lsc_p2 : float
@@ -37,8 +37,8 @@ class Forcing(object):
         forcing_log_p2 = np.log(278.06340701)
         forcing_flag = 'log' # log or power
         #forcing_flag = 'power' # log or power
-	absorbtion_p1 = 0.94835
-	absorbtion_p2 = 0.741547
+	absorption_p1 = 0.94835
+	absorption_p2 = 0.741547
 	lsc_p1 = 285.6268
 	lsc_p2 = 0.88414
         
@@ -104,8 +104,8 @@ class Forcing(object):
 				p_c = p_co2 / 3.67 
 				add_p_ppm = subinterval_len * p_c / 2.13
 				lsc = cls.lsc_p1 + cls.lsc_p2 * cum_sink
-				absorbtion = 0.5 * cls.absorbtion_p1 * np.sign(ghg_level-lsc) * np.abs(ghg_level-lsc)**cls.absorbtion_p2
-				cum_sink += absorbtion
+				absorption = 0.5 * cls.absorption_p1 * np.sign(ghg_level - lsc) * np.abs(ghg_level - lsc) ** cls.absorption_p2
+				cum_sink += absorption
                                 if cls.forcing_flag == 'log':
                                         if ghg_level > 260.:
                                                 log_forcing = cls.forcing_log_p1*(np.log(ghg_level)-cls.forcing_log_p2)
@@ -119,7 +119,7 @@ class Forcing(object):
                                         cum_forcing += power_forcing
                                 #if ghg_level < 0.0:
                                 #        print 'forcing: ',cls.forcing_flag, ghg_level, log_forcing, power_forcing
-				ghg_level += add_p_ppm - absorbtion
+				ghg_level += add_p_ppm - absorption
 
 		if returning == "forcing":
 			return cum_forcing
