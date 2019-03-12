@@ -1,9 +1,9 @@
-from __future__ import division, print_function
+
 import numpy as np
 from scipy.optimize import brentq
-from storage_tree import BigStorageTree, SmallStorageTree
-from optimization import GeneticAlgorithm, GradientSearch
-from tools import write_columns_csv, append_to_existing, import_csv
+from .storage_tree import BigStorageTree, SmallStorageTree
+from .optimization import GeneticAlgorithm, GradientSearch
+from .tools import write_columns_csv, append_to_existing, import_csv
 
             
 def additional_ghg_emission(m, utility):
@@ -48,7 +48,7 @@ def store_trees(prefix=None, start_year=2015, **kwargs):
     """
     if prefix is None:
         prefix = ""
-    for name, tree in kwargs.items():
+    for name, tree in list(kwargs.items()):
         tree.write_columns(prefix + "trees", name, start_year)
 
 def delta_consumption(m, utility, cons_tree, cost_tree, delta_m):
@@ -419,11 +419,11 @@ class ClimateOutput(object):
 
         write_columns_csv([m, self.prices, self.ave_mitigations, self.ave_emissions, self.ghg_levels], 
                    prefix+"node_period_output", ["Node", "Mitigation", "Prices", "Average Mitigation",
-                   "Average Emission", "GHG Level"], [range(len(m))])
+                   "Average Emission", "GHG Level"], [list(range(len(m)))])
 
         append_to_existing([self.expected_period_price, self.expected_period_mitigation, self.expected_period_emissions],
                             prefix+"node_period_output", header=["Period", "Expected Price", "Expected Mitigation",
-                            "Expected Emission"], index=[range(self.utility.tree.num_periods)], start_char='\n')
+                            "Expected Emission"], index=[list(range(self.utility.tree.num_periods))], start_char='\n')
 
         store_trees(prefix=prefix, Utility=utility_tree, Consumption=cons_tree, 
                 Cost=cost_tree, CertainEquivalence=ce_tree)
