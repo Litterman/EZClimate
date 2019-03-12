@@ -1,7 +1,7 @@
 import numpy as np
 from abc import ABCMeta, abstractmethod
 
-class BusinessAsUsual(object):
+class BusinessAsUsual(object, metaclass=ABCMeta):
     """Abstract BAU class for the EZ-Climate model.
 
     Parameters
@@ -27,7 +27,6 @@ class BusinessAsUsual(object):
         constant for converting GHG to emission??
 
     """
-    __metaclass__ = ABCMeta
     def __init__(self, ghg_start, ghg_end):
         self.ghg_start = ghg_start
         self.ghg_end = ghg_end

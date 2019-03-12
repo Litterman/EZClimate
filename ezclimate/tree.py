@@ -1,4 +1,4 @@
-from __future__ import division
+
 import numpy as np
 
 class TreeModel(object):
@@ -311,7 +311,7 @@ class TreeModel(object):
 
         """
         first, last = self.get_nodes_in_period(period)
-        return self.node_prob[range(first, last+1)]
+        return self.node_prob[list(range(first, last+1))]
     
     def reachable_end_states(self, node, period=None, state=None):
         """Returns what future end states can be reached from given node.

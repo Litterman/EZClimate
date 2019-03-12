@@ -34,9 +34,9 @@ def write_columns_csv(lst, file_name, header=[], index=None, start_char=None, de
 	d = find_path(file_name)
 	if index is not None:
 		index.extend(lst)
-		output_lst = zip(*index)
+		output_lst = list(zip(*index))
 	else:
-		output_lst = zip(*lst)
+		output_lst = list(zip(*lst))
 
 	with open(d, open_as) as f:
 		writer = csv.writer(f, delimiter=delimiter)
@@ -55,7 +55,7 @@ def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
 			row = next(reader)
 			nested_list = isinstance(lst[0], list) or isinstance(lst[0], np.ndarray)
 			if nested_list:
-				lst = zip(*lst)
+				lst = list(zip(*lst))
 				row.extend(header)	
 			else:
 				row.append(header)
@@ -108,9 +108,9 @@ def import_csv(file_name, delimiter=';', header=True, indices=None, start_at=0, 
 ##########
 
 def _pickle_method(method):
-    func_name = method.im_func.__name__
-    obj = method.im_self
-    cls = method.im_class
+    func_name = method.__func__.__name__
+    obj = method.__self__
+    cls = method.__self__.__class__
     if func_name.startswith('__') and not func_name.endswith('__'): #deal with mangled names
         cls_name = cls.__name__.lstrip('_')
         func_name = '_' + cls_name + func_name

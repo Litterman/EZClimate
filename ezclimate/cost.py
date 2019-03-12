@@ -1,11 +1,10 @@
-from __future__ import division
+
 import numpy as np
 from abc import ABCMeta, abstractmethod
-from storage_tree import BigStorageTree
+from .storage_tree import BigStorageTree
 
-class Cost(object):
+class Cost(object, metaclass=ABCMeta):
     """Abstract Cost class for the EZ-Climate model."""
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def cost(self):

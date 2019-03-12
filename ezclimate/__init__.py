@@ -10,14 +10,14 @@ for dependency in hard_dependencies:
 if missing_dependencies:
     raise ImportError("Missing required dependencies {0}".format(missing_dependencies))
 
-from optimization import *
-from analysis import *
-from bau import *
-from cost import *
-from damage import *
-from damage_simulation import *
-from forcing import *
-from storage_tree import *
-from tree import *
-from utility import *
+from .optimization import *
+from .analysis import *
+from .bau import *
+from .cost import *
+from .damage import *
+from .damage_simulation import *
+from .forcing import *
+from .storage_tree import *
+from .tree import *
+from .utility import *
 

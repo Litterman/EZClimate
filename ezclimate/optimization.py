@@ -1,14 +1,14 @@
-from __future__ import division, print_function
+
 import numpy as np
 import multiprocessing
-from tools import _pickle_method, _unpickle_method
+from .tools import _pickle_method, _unpickle_method
 try:
-    import copy_reg
+    import copyreg
 except:
     import copyreg as copy_reg
 import types
 
-copy_reg.pickle(types.MethodType, _pickle_method, _unpickle_method)
+copyreg.pickle(types.MethodType, _pickle_method, _unpickle_method)
 
 class GeneticAlgorithm(object):
 	"""Optimization algorithm for the EZ-Climate model. 
@@ -143,7 +143,7 @@ class GeneticAlgorithm(object):
 	    
 	    """
 	    chosen = []
-	    for i in xrange(k):
+	    for i in range(k):
 	        index = self._random_index(pop, tournsize)
 	        aspirants = pop[index]
 	        aspirants_fitness = fitness[index]
@@ -438,7 +438,7 @@ class GradientSearch(object) :
 		if not isinstance(m, np.ndarray):
 			self.m = np.array(m)
 		pool = multiprocessing.Pool()
-		indices = np.delete(range(len(m)), fixed_indices)
+		indices = np.delete(list(range(len(m))), fixed_indices)
 		res = pool.map(self._partial_grad, indices)
 		for g, i in res:
 			grad[i] = g
@@ -553,7 +553,7 @@ class GradientSearch(object) :
 		candidate_points = initial_point_list[:topk]
 		mitigations = []
 		utilities = np.zeros(topk)
-		for cp, count in zip(candidate_points, range(topk)):
+		for cp, count in zip(candidate_points, list(range(topk))):
 			if not isinstance(cp, np.ndarray):
 				cp = np.array(cp)
 			print("Starting process {} of Gradient Descent".format(count+1))
@@ -625,7 +625,7 @@ class CoordinateDescent(object):
 		num_decision_nodes = m.shape[0]
 		x_hist = []
 		u_hist = []
-		nodes = range(self.var_nums)
+		nodes = list(range(self.var_nums))
 		x_hist.append(m.copy())
 		u_hist.append(self.u.utility(m)[0])
 		print("----------------Coordinate Descent Starting----------------")

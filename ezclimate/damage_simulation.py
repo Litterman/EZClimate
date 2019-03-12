@@ -1,15 +1,15 @@
-from __future__ import division
+
 import numpy as np
 import multiprocessing as mp
-from tools import _pickle_method, _unpickle_method
-from tools import write_columns_csv, append_to_existing
+from .tools import _pickle_method, _unpickle_method
+from .tools import write_columns_csv, append_to_existing
 try:
-    import copy_reg
+    import copyreg
 except:
     import copyreg as copy_reg
 import types
 
-copy_reg.pickle(types.MethodType, _pickle_method, _unpickle_method)
+copyreg.pickle(types.MethodType, _pickle_method, _unpickle_method)
 
 class DamageSimulation(object):
     """Simulation of damages for the EZ-Climate model.
@@ -217,7 +217,7 @@ class DamageSimulation(object):
         res = prob_of_survival < disaster
         rows, cols = np.nonzero(res)
         row, count = np.unique(rows, return_counts=True)
-        first_occurance = zip(row, cols[np.insert(count.cumsum()[:-1],0,0)])
+        first_occurance = list(zip(row, cols[np.insert(count.cumsum()[:-1],0,0)]))
         for pos in first_occurance:
             consump[pos[0], pos[1]:] *= np.exp(-disaster_cons[pos[0]])
         return consump

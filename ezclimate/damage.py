@@ -1,10 +1,10 @@
-from __future__ import division, print_function
+
 import numpy as np
 from abc import ABCMeta, abstractmethod
-from damage_simulation import DamageSimulation
-from forcing import Forcing
+from .damage_simulation import DamageSimulation
+from .forcing import Forcing
 
-class Damage(object):
+class Damage(object, metaclass=ABCMeta):
 	"""Abstract damage class for the EZ-Climate model.
 
 	Parameters
@@ -22,7 +22,6 @@ class Damage(object):
 		business-as-usual scenario of emissions
 
 	"""
-	__metaclass__ = ABCMeta
 	def __init__(self, tree, bau):
 		self.tree = tree
 		self.bau = bau
@@ -182,7 +181,7 @@ class DLWDamage(Damage):
 			If file does not exist.
 
 		"""
-		from tools import import_csv
+		from .tools import import_csv
 		try:
 			d = import_csv(file_name, ignore="#", header=False)
 		except IOError as e:
@@ -353,7 +352,7 @@ class DLWDamage(Damage):
 				add = end_node-start_node+1
 				start_node += add
 				end_node += add
-			nodes = np.array(range(start_node, end_node+1))
+			nodes = np.array(list(range(start_node, end_node+1)))
 		if period is None and nodes is None:
 			raise ValueError("Need to give function either nodes or the period")
 
@@ -390,7 +389,7 @@ class DLWDamage(Damage):
 				add = end_node-start_node+1
 				start_node += add
 				end_node += add
-			nodes = np.array(range(start_node, end_node+1))
+			nodes = np.array(list(range(start_node, end_node+1)))
 			ghg_level[nodes] = self.ghg_level_period(m, nodes=nodes)
 		return ghg_level
 

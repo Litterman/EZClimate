@@ -1,8 +1,8 @@
-from __future__ import division
+
 import numpy as np
 from abc import ABCMeta, abstractmethod
 
-class BaseStorageTree(object):
+class BaseStorageTree(object, metaclass=ABCMeta):
 	"""Abstract storage class for the EZ-Climate model.
 
 	Parameters
@@ -22,7 +22,6 @@ class BaseStorageTree(object):
 		dictionary where keys are `periods` and values are nodes in period
 
 	"""
-	__metaclass__ = ABCMeta
 
 	def __init__(self, decision_times):
 		self.decision_times = decision_times
@@ -62,7 +61,7 @@ class BaseStorageTree(object):
 	def nodes(self):
 		"""int: number of nodes in the tree."""
 		n = 0
-		for array in self.tree.values():
+		for array in list(self.tree.values()):
 			n += len(array)
 		return n
 
@@ -147,7 +146,7 @@ class BaseStorageTree(object):
 			delimiter in file
 
 		"""
-		from tools import find_path
+		from .tools import find_path
 		import csv
 		
 		real_times = self.decision_times[:-1]
@@ -162,7 +161,7 @@ class BaseStorageTree(object):
 			output_lst.append(temp_lst)
 			prev_k = k
 
-		write_lst = zip(*output_lst)
+		write_lst = list(zip(*output_lst))
 		d = find_path(file_name)
 		with open(d, 'wb') as f:
 			writer = csv.writer(f, delimiter=delimiter)
@@ -195,7 +194,7 @@ class BaseStorageTree(object):
 			delimiter in file
 
 		"""
-		from tools import write_columns_csv, file_exists
+		from .tools import write_columns_csv, file_exists
 		if file_exists(file_name):
 			self.write_columns_existing(file_name, header)
 		else:
@@ -236,7 +235,7 @@ class BaseStorageTree(object):
 			delimiter in file
 
 		"""
-		from tools import write_columns_to_existing
+		from .tools import write_columns_to_existing
 		output_lst = []
 		for t in self.decision_times[:-1]:
 			output_lst.extend(self.tree[t])
