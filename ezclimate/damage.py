@@ -1,8 +1,8 @@
 
 import numpy as np
 from abc import ABCMeta, abstractmethod
-from .damage_simulation import DamageSimulation
-from .forcing import Forcing
+from damage_simulation import DamageSimulation
+from forcing import Forcing
 
 class Damage(object, metaclass=ABCMeta):
 	"""Abstract damage class for the EZ-Climate model.
@@ -125,8 +125,7 @@ class DLWDamage(Damage):
 				d_sum = np.zeros(nperiods)
 				old_state = 0
 				for d_class in range(nperiods):
-					d_sum[d_class] = (self.tree.final_states_prob[old_state:old_state+sum_class[d_class]] \
-						 			 * self.d_rcomb[k, old_state:old_state+sum_class[d_class], period]).sum()	
+					d_sum[d_class] = (self.tree.final_states_prob[old_state:old_state+sum_class[d_class]] * self.d_rcomb[k, old_state:old_state+sum_class[d_class], period]).sum()	
 					old_state += sum_class[d_class]
 					self.tree.final_states_prob[new_state[d_class, 0:sum_class[d_class]]] = temp_prob[0]
 				for d_class in range(nperiods):	
@@ -181,12 +180,12 @@ class DLWDamage(Damage):
 			If file does not exist.
 
 		"""
-		from .tools import import_csv
+		from tools import import_csv
 		try:
 			d = import_csv(file_name, ignore="#", header=False)
 		except IOError as e:
 			import sys
-			print("Could not import simulated damages:\n\t{}".format(e))
+			print(("Could not import simulated damages:\n\t{}".format(e)))
 			sys.exit(0)
 
 		n = self.tree.num_final_states	

@@ -1,8 +1,8 @@
 
 import numpy as np
 import multiprocessing as mp
-from .tools import _pickle_method, _unpickle_method
-from .tools import write_columns_csv, append_to_existing
+from tools import _pickle_method, _unpickle_method
+from tools import write_columns_csv, append_to_existing
 try:
     import copyreg
 except:

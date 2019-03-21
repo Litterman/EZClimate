@@ -1,7 +1,6 @@
-
 import numpy as np
 from abc import ABCMeta, abstractmethod
-from .storage_tree import BigStorageTree
+from storage_tree import BigStorageTree
 
 class Cost(object, metaclass=ABCMeta):
     """Abstract Cost class for the EZ-Climate model."""
@@ -42,21 +41,6 @@ class DLWCost(Cost):
 
     Attributes
     ----------
-    tree : `TreeModel` object
-        tree structure used
-    g : float
-        initial scale of the cost function
-    a : float
-        curvature of the cost function
-    max_price : float
-        price at which carbon dioxide can be removed from atmosphere in unlimited scale
-    tech_const : float 
-        determines the degree of exogenous technological improvement over time. A number 
-            of 1.0 implies 1 percent per yer lower cost
-    tech_scale : float
-        determines the sensitivity of technological change to previous mitigation
-    cons_at_0 : float 
-        initial consumption. Default $30460bn based on US 2010 values.
     cbs_level : float
         constant 
     cbs_deriv : float

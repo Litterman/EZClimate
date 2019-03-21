@@ -1,7 +1,7 @@
 
 from abc import ABCMeta, abstractmethod
 import numpy as np
-from .storage_tree import BigStorageTree, SmallStorageTree
+from storage_tree import BigStorageTree, SmallStorageTree
 
 np.seterr(all='ignore')
 
@@ -322,7 +322,7 @@ class EZUtility(object):
 		     * prev_cons**self.r + self.b * ce_term)**((1.0/self.r)-1.0)
 		return t1 * t2
 
-	def _period_marginal_utility(self, period, utility_tree, cons_tree, ce_tree):
+	def _period_marginal_utility(self, prev_mu_0, prev_mu_1, m, period, utility_tree, cons_tree, ce_tree):
 		"""Marginal utility for each node in a period."""
 		damage_period = utility_tree.between_decision_times(period)
 		mu_0 = self._mu_0(cons_tree[period], ce_tree[period])
@@ -389,8 +389,7 @@ class EZUtility(object):
 		periods = utility_tree.periods[::-1]
 
 		for period in periods[2:]:
-			mu_0, mu_1, mu_2 = self._period_marginal_utility(mu_tree_0.get_next_period_array(period),
-				mu_tree_1.get_next_period_array(period), m, period, utility_tree, cons_tree, ce_tree)
+			mu_0, mu_1, mu_2 = self._period_marginal_utility(mu_tree_0.get_next_period_array(period), mu_tree_1.get_next_period_array(period), m, period, utility_tree, cons_tree, ce_tree)
 			mu_tree_0.set_value(period, mu_0)
 			mu_tree_1.set_value(period, mu_1)
 			if mu_2 is not None:
