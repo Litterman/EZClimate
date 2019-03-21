@@ -7,11 +7,11 @@ EZ-Climate is a model for pricing carbon dioxide emission. It explores the impli
 You can find the most recent releases at: https://pypi.python.org/pypi/ezclimate/.
 
 ## Documentation
-See the [EZ-Climate User's Guide](https://oscarsjogren.github.io/dlw/) for EZ-Climate documentation.
+See the [EZ-Climate User's Guide](https://oscarsjogren.github.io/dlw/) for EZ-Climate documentation. (21 March 2019: Please note that we are currently revising the paper. The code is changing on a near-daily basis. The user guide, hence is no longer up-to-date, and no longer works with the Python 3.7-compliant code. We will have an update soon.)
 
 In order to get the tip documentation, change directory to the `docs` subfolder and type in `make html`, the documentation will be under `../../ez_climate_docs/html`. You will need [Sphinx](http://sphinx.pocoo.org) to build the documentation.
 
-See [Applying Asset Pricing Theory to Calibrate the Price of Climate Risk](https://gwagner.com/daniel-litterman-wagner-applying-asset-pricing-theory-to-calibrate-the-price-of-climate-risk/) for the latest working paper employing this code.
+See [Applying Asset Pricing Theory to Calibrate the Price of Climate Risk](https://gwagner.com/ezclimate/) for the latest working paper employing this code.
 
 ## Installation
 
