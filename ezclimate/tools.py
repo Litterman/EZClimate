@@ -45,38 +45,38 @@ def write_columns_csv(lst, file_name, header=[], index=None, start_char=None, de
         if header:
             writer.writerow(header)
         for row in output_lst:
-            print('***DEBUG -- printing row and type(row):',row,type(row))
+            #print('***DEBUG -- printing row and type(row):',row,type(row))
             writer.writerow(row)
 
 def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
     d = find_path(file_name)
-    print('***In WCTE, lst= ',lst)
+    #print('***In WCTE, lst= ',lst)
     with open(d, 'r') as finput:
         reader = csv.reader(finput, delimiter=delimiter)
         all_lst = []
         row = next(reader)
-        print('***In WCTE, row- = ', row)
+        #print('***In WCTE, row- = ', row)
         nested_list = isinstance(lst[0], list) or isinstance(lst[0], np.ndarray)
-        print('***In WCTE, type(lst[0]) ',type(lst[0]))
+        #print('***In WCTE, type(lst[0]) ',type(lst[0]))
         if nested_list:
             lst = list(zip(*lst))
             row.extend(header)    
         else:
             row.append(header)
-        print('***In WCTE, row+ = ', row)
+        #print('***In WCTE, row+ = ', row)
         all_lst.append(row)
         n = len(lst)
         i = 0
         for row in reader:
-            print('***In WCTE, row ',i,'- = ', row)
+            #print('***In WCTE, row ',i,'- = ', row)
             if nested_list:
                 row.extend(lst[i])
             else:
                 row.append(lst[i])
-            print('***In WCTE, row ',i,'+ = ', row)
+            #print('***In WCTE, row ',i,'+ = ', row)
             all_lst.append(row)
             i += 1
-    print('***In WCTE, all_lst =',all_lst)
+    #print('***In WCTE, all_lst =',all_lst)
     with open(d, 'w') as foutput:
         writer = csv.writer(foutput, delimiter=delimiter)
         writer.writerows(all_lst)
