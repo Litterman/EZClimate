@@ -9,7 +9,7 @@ class Forcing(object):
     Attributes
     ----------
     sink_start : float
-        sinking constant
+        sink constant
     forcing_start : float
         forcing start constant
     forcing_p1 : float
