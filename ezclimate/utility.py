@@ -1,7 +1,6 @@
-
 from abc import ABCMeta, abstractmethod
 import numpy as np
-from storage_tree import BigStorageTree, SmallStorageTree
+from ezclimate.storage_tree import BigStorageTree, SmallStorageTree
 
 np.seterr(all='ignore')
 

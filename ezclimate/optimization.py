@@ -1,7 +1,6 @@
-
 import numpy as np
 import multiprocessing
-from tools import _pickle_method, _unpickle_method
+from ezclimate.tools import _pickle_method, _unpickle_method
 try:
     import copyreg
 except:

@@ -1,6 +1,6 @@
 import numpy as np
 from abc import ABCMeta, abstractmethod
-from storage_tree import BigStorageTree
+from ezclimate.storage_tree import BigStorageTree
 
 class Cost(object, metaclass=ABCMeta):
     """Abstract Cost class for the EZ-Climate model."""

@@ -1,9 +1,8 @@
 import numpy as np
 from scipy.optimize import brentq
-from storage_tree import BigStorageTree, SmallStorageTree
-from optimization import GeneticAlgorithm, GradientSearch
-from tools import write_columns_csv, append_to_existing, import_csv
-
+from ezclimate.storage_tree import BigStorageTree, SmallStorageTree
+from ezclimate.optimization import GeneticAlgorithm, GradientSearch
+from ezclimate.tools import write_columns_csv, append_to_existing, import_csv
             
 def additional_ghg_emission(m, utility):
     """Calculate the emission added by every node.

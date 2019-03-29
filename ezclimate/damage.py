@@ -1,8 +1,8 @@
 
 import numpy as np
 from abc import ABCMeta, abstractmethod
-from damage_simulation import DamageSimulation
-from forcing import Forcing
+from ezclimate.damage_simulation import DamageSimulation
+from ezclimate.forcing import Forcing
 
 class Damage(object, metaclass=ABCMeta):
 	"""Abstract damage class for the EZ-Climate model.
