@@ -1,4 +1,3 @@
-
 import numpy as np
 import multiprocessing as mp
 from ezclimate.tools import _pickle_method, _unpickle_method

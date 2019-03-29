@@ -179,7 +179,7 @@ class DLWDamage(Damage):
 			If file does not exist.
 
 		"""
-		from tools import import_csv
+		from ezclimate.tools import import_csv
 		try:
 			d = import_csv(file_name, ignore="#", header=False)
 		except IOError as e:
