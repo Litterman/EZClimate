@@ -9,11 +9,10 @@ else:
     read_md = lambda f: convert(f, 'rst')
 
 setup(name='ezclimate',
-      version='2.0',
+      version='2.0.4',
       description='EZ-Climate model',
       long_description=read_md('README.md'),
       classifiers=[
-        'Development Status :: PNAS R&R-190312-gw',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.7'
       ],
