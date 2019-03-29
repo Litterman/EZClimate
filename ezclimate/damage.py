@@ -1,4 +1,3 @@
-
 import numpy as np
 from abc import ABCMeta, abstractmethod
 from ezclimate.damage_simulation import DamageSimulation

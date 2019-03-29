@@ -10,7 +10,7 @@ for dependency in hard_dependencies:
 if missing_dependencies:
     raise ImportError("Missing required dependencies {0}".format(missing_dependencies))
 
-from ezclimate.optimization import *
+from ezclimate.optimization import GeneticAlgorithm, GradientSearch, CoordinateDescent
 from ezclimate.analysis import *
 from ezclimate.bau import *
 from ezclimate.cost import *

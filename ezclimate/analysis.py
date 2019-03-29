@@ -46,6 +46,7 @@ def store_trees(prefix=None, start_year=2015, **kwargs):
     """
     if prefix is None:
         prefix = ""
+    print(f'***TREE DEBUG --- writing trees for {prefix}')
     for name, tree in list(kwargs.items()):
         tree.write_columns(prefix + "trees", name, start_year)
 

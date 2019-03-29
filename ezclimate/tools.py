@@ -45,38 +45,41 @@ def write_columns_csv(lst, file_name, header=[], index=None, start_char=None, de
         if header:
             writer.writerow(header)
         for row in output_lst:
+            print('***DEBUG -- printing row and type(row):',row,type(row))
             writer.writerow(row)
 
 def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
     d = find_path(file_name)
+    print('***In WCTE, lst= ',lst)
     with open(d, 'r') as finput:
-            reader = csv.reader(finput, delimiter=delimiter)
-            all_lst = []
-            row = next(reader)
-            nested_list = isinstance(lst[0], list) or isinstance(lst[0], np.ndarray)
+        reader = csv.reader(finput, delimiter=delimiter)
+        all_lst = []
+        row = next(reader)
+        print('***In WCTE, row- = ', row)
+        nested_list = isinstance(lst[0], list) or isinstance(lst[0], np.ndarray)
+        print('***In WCTE, type(lst[0]) ',type(lst[0]))
+        if nested_list:
+            lst = list(zip(*lst))
+            row.extend(header)    
+        else:
+            row.append(header)
+        print('***In WCTE, row+ = ', row)
+        all_lst.append(row)
+        n = len(lst)
+        i = 0
+        for row in reader:
+            print('***In WCTE, row ',i,'- = ', row)
             if nested_list:
-                lst = list(zip(*lst))
-                row.extend(header)    
+                row.extend(lst[i])
             else:
-                row.append(header)
-            all_lst.append(row)
-            n = len(lst)
-            i = 0
-            for row in reader:
-                if nested_list:
-                    row.extend(lst[i])
-                else:
-                    try:
-                        row.append(lst[i])
-                    except IndexError:
-                        print('The length of lst is:',len(lst))
-                        print('The index is i=',i)
-                        print('lst=',lst)
+                row.append(lst[i])
+            print('***In WCTE, row ',i,'+ = ', row)
             all_lst.append(row)
             i += 1
+    print('***In WCTE, all_lst =',all_lst)
     with open(d, 'w') as foutput:
-            writer = csv.writer(foutput, delimiter=delimiter)
-            writer.writerows(all_lst)
+        writer = csv.writer(foutput, delimiter=delimiter)
+        writer.writerows(all_lst)
             
 def append_to_existing(lst, file_name, header="", index=None, delimiter=';', start_char=None):
     write_columns_csv(lst, file_name, header, index, start_char=start_char, delimiter=delimiter, open_as='a')
