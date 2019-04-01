@@ -70,7 +70,7 @@ def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
         n = len(lst)
         i = 0
         for row in reader:
-             if i >= n:
+            if i >= n:
                 print('***(temporary) emergency break with i=',i)
                 break
             #print('***In WCTE, row ',i,'- = ', row)
