@@ -32,11 +32,17 @@ def load_csv(file_name, delimiter=';', comment=None):
 
 def write_columns_csv(lst, file_name, header=[], index=None, start_char=None, delimiter=';', open_as='w'):
     d = find_path(file_name)
+    #if file_name.find('tree') >0:
+        # print('***in write_column_csv, file_name =',file_name,' header =',header,'index=',index,'lst=',lst)
     if index is not None:
         index.extend(lst)
         output_lst = list(zip(*index))
     else:
         output_lst = list(zip(*lst))
+    if file_name.find('tree') >0:
+        print()
+        print('***in write_column_csv,output_lst=',output_lst)
+        print()
 
     with open(d, open_as) as f:
         writer = csv.writer(f, delimiter=delimiter)
@@ -45,12 +51,17 @@ def write_columns_csv(lst, file_name, header=[], index=None, start_char=None, de
         if header:
             writer.writerow(header)
         for row in output_lst:
-            #print('***DEBUG -- printing row and type(row):',row,type(row))
+            if file_name.find('tree') >0:
+                print('    ***write_columns_csv -- type:',type(row),', row=', row)
             writer.writerow(row)
+        if file_name.find('tree') >0:
+            print('***DONE -- rite_columns_csv')
+            print()
+        
 
 def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
     d = find_path(file_name)
-    print('***In WCTE, len(lst) shape = ',len(lst))
+    #print('***In WCTE, len(lst) shape = ',len(lst))
     with open(d, 'r') as finput:
         reader = csv.reader(finput, delimiter=delimiter)
         all_lst = []
@@ -63,16 +74,17 @@ def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
             row.extend(header)    
         else:
             row.append(header)
-        print('***In WCTE, after header, row = ', row)
-        print('***In WCTE, after header, len(lst) = ',len(lst))
+        #print('***In WCTE, after header, row = ', row)
+        #print('***In WCTE, after header, len(lst) = ',len(lst))
 
         all_lst.append(row)
         n = len(lst)
         i = 0
         for row in reader:
-            #if i >= n:
-            #    print('***(temporary) emergency break with i=',i)
-            #    break
+            #print(' *** In WCTE i=',i,', and row =',row)
+            if i >= (n+10):
+                print('***(temporary) emergency break with i=',i)
+                break
             #print('***In WCTE, row ',i,'- = ', row)
             #print('***IN WCTE, len(lst),i,lst[i]',len(lst),i,lst[i])
             if nested_list:
@@ -83,15 +95,15 @@ def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
                 except IndexError:
                     print(' *** Index Error (1) in WCTE; i=',i)
                     print(' *** Index Error (1) in WCTE; len(lst)=',len(lst))
+                    print(' *** Index Error (2) in WCTE; row=', row)
                 try:
                     row.append(item)
                 except IndexError:
                     print(' *** Index Error (2) in WCTE; i=',i)
-                    print(' *** Index Error (2) in WCTE; row=', row)
 
             all_lst.append(row)
             i += 1
-    #print('***In WCTE, all_lst =',all_lst)
+
     with open(d, 'w') as foutput:
         writer = csv.writer(foutput, delimiter=delimiter)
         writer.writerows(all_lst)

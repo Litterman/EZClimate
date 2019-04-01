@@ -470,7 +470,7 @@ class ClimateOutput(object):
         else:
             prefix = ""
 
-        print('in ClimateOutput.save_output(), prefix =')
+        #print('in ClimateOutput.save_output(), prefix =',prefix)
         write_columns_csv([m, self.prices, self.ave_mitigations, self.ave_emissions, self.ghg_levels], 
                     prefix+"node_period_output", ["Node", "Mitigation", "Prices", "Average Mitigation",
                     "Average Emission", "GHG Level"], [list(range(len(m)))])

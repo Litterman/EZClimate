@@ -220,6 +220,7 @@ class BaseStorageTree(object, metaclass=ABCMeta):
                     nodes.append(k)
                     output_lst.append(self.tree[t][n])
                     k += 1
+            #print('*** in write_columns, header = ',header,'lst = ',output_lst)
             write_columns_csv(lst=[output_lst], file_name=file_name, header=["Year", "Node", header], 
                               index=[years, nodes], delimiter=delimiter)
 
