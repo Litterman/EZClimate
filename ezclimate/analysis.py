@@ -1,6 +1,8 @@
 """
 KD Comments:
 
+*** NB: RiskDecomposition.sensitivity_analysis()  as implemented doesn't work -- no return statement
+
 1. This code establishes three classes: 
 
 class ClimateOutput(object):
@@ -103,7 +105,7 @@ def store_trees(prefix=None, start_year=2015, tree_data={}):
 
 def delta_consumption(m, utility, cons_tree, cost_tree, delta_m):
     """Calculate the changes in consumption and the mitigation cost component 
-    of consumption when increaseing period 0 mitigiation with `delta_m`.
+    of consumption when increasing period 0 mitigiation with `delta_m`.
 
     Parameters
     ----------
@@ -128,8 +130,11 @@ def delta_consumption(m, utility, cons_tree, cost_tree, delta_m):
     m_copy = m.copy()
     m_copy[0] += delta_m
 
-    new_utility_tree, new_cons_tree, new_cost_tree, new_ce_tree = utility.utility(m_copy, return_trees=True)
-
+    tree_dict = utility.utility(m_copy, return_trees=True)
+    new_cons_tree = tree_dict['Consumption']
+    new_cost_tree = tree_dict['Cost']
+    new_utility_tree = tree_dict['Utility']
+    
     for period in new_cons_tree.periods:
         new_cons_tree.tree[period] = (new_cons_tree.tree[period]-cons_tree.tree[period]) / delta_m
 
@@ -475,8 +480,8 @@ class ClimateOutput(object):
                                 "Expected Emission"], index=[list(range(self.utility.tree.num_periods))], start_char='\n')
 
 
-        utility_trees = self.utility.utility(m, return_trees=True)
-        store_trees(prefix = prefix, trees = utility_trees)
+        tree_dict = self.utility.utility(m, return_trees=True)
+        store_trees(prefix = prefix, trees = tree_dict)
 
 
 class RiskDecomposition(object):
@@ -548,7 +553,12 @@ class RiskDecomposition(object):
 
         """
 
-        utility_tree, cons_tree, cost_tree, ce_tree = self.utility.utility(m, return_trees=True)
+        tree_dict = self.utility.utility(m, return_trees=True)
+        utility_tree = tree_dict['Utility']
+        cons_tree = tree_dict['Consumption']
+        cost_tree = tree_dict['Cost']
+        ce_tree = tree_dict['CertainEquivalence']
+
         cost_sum = 0
 
         self.delta_cons_tree, self.delta_cost_array, delta_utility = delta_consumption(m, self.utility, cons_tree, cost_tree, 0.01)

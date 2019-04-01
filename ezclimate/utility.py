@@ -195,7 +195,8 @@ class EZUtility(object):
 		
 		>>> ezu.utility(m)
 		array([ 9.83391921])
-		>>> utility_tree, cons_tree, cost_tree, ce_tree = ezu.utility(m, return_trees=True)
+		>>> tree_dict = ezu.utility(m, return_trees=True)
+        
 
 		"""
 		utility_tree = BigStorageTree(subinterval_len=self.period_len, decision_times=self.decision_times)
@@ -244,7 +245,7 @@ class EZUtility(object):
 		
 		>>> ezu.adjusted_utility(m, final_cons_eps=0.1)
 		array([ 9.83424045])
-		>>> utility_tree, cons_tree, cost_tree, ce_tree = ezu.adjusted_utility(m, final_cons_eps=0.1, return_trees=True)
+		>>> tree_dict = ezu.adjusted_utility(m, final_cons_eps=0.1, return_trees=True)
 		
 		>>> arr = np.zeros(int(ezu.decision_times[-1]/ezu.period_len) + 1)
 		>>> arr[-1] = 0.1
@@ -345,21 +346,18 @@ class EZUtility(object):
 			mu_1 = self._mu_2(cons_tree[period], prev_cons, prev_ce)
 			return mu_0, mu_1, None 
 
-	def marginal_utility(self, m, utility_tree, cons_tree, cost_tree, ce_tree):
+	def marginal_utility(self, m, tree_dict):
 		"""Calculating marginal utility for sensitivity analysis, e.g. in the SSC decomposition.
 
 		Parameters
 		----------
 		m : ndarray
 			array of mitigations
-		utility_tree : `BigStorageTree` object 
-			utility values from using mitigation `m`
-		cons_tree : `BigStorageTree` object
-			consumption values from using mitigation `m`
-		cost_tree : `SmallStorageTree` object
-			cost values from using mitigation `m`
-		ce_tree : `BigStorageTree` object
-			certain equivalence values from using mitigation `m`
+        tree_dict should contain the following entries:
+      	    Utility :           `BigStorageTree`   - utility values from using mitigation `m`
+            Consumption :       `BigStorageTree`   - consumption values from using mitigation `m`
+		    Cost :              `SmallStorageTree` - cost values from using mitigation `m`
+		    CertainEquivalent : `BigStorageTree`   - certainty equivalence values from using mitigation `m`
 
 		Returns
 		-------
@@ -370,7 +368,7 @@ class EZUtility(object):
 		--------
 		Assuming we have declared a EZUtility object as 'ezu' and have a mitigation array 'm'.
 		
-		>>> utility_tree, cons_tree, cost_tree, ce_tree = ezu.utility(m, return_trees=True)
+		>>> tree_dict = ezu.utility(m, return_trees=True)
 		>>> mu_0_tree, mu_1_tree, mu_2_tree = ezu.marginal_utility(m, utility_tree, cons_tree, cost_tree, ce_tree)
 		>>> mu_0_tree[0] # value at period 0
 		array([ 0.33001256])
@@ -383,8 +381,13 @@ class EZUtility(object):
 		mu_tree_0 = BigStorageTree(subinterval_len=self.period_len, decision_times=self.decision_times)
 		mu_tree_1 = BigStorageTree(subinterval_len=self.period_len, decision_times=self.decision_times)
 		mu_tree_2 = SmallStorageTree(decision_times=self.decision_times)
+
+        utility_tree = tree_dict['Utility']
+        cons_tree = tree_dict['Consumption']
+        cost_tree = tree_dict['Cost']
+        ce_tree = tree_dict['CertainEquivalence']
 		
-		self._end_period_marginal_utility(mu_tree_0, mu_tree_1, ce_tree, utility_tree, cons_tree)
+		self.end_period_marginal_utility(mu_tree_0, mu_tree_1, ce_tree, utility_tree, cons_tree)
 		periods = utility_tree.periods[::-1]
 
 		for period in periods[2:]:
