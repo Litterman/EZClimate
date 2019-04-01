@@ -69,7 +69,7 @@ def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
         i = 0
         for row in reader:
             #print('***In WCTE, row ',i,'- = ', row)
-            print('***IN WCTE, len(lst),i,lst[i]',len(lst),i,lst[i])
+            #print('***IN WCTE, len(lst),i,lst[i]',len(lst),i,lst[i])
             if nested_list:
                 row.extend(lst[i])
             else:

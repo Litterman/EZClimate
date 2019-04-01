@@ -20,6 +20,16 @@ class BaseStorageTree(object, metaclass=ABCMeta):
     tree : dict
         dictionary where keys are `periods` and values are nodes in period
 
+    Methods:
+    --------
+    write_tree(self, file_name, header, delimiter=";") :
+        *** Never used!!
+
+    write_columns(self, file_name, header, start_year=2015, delimiter=";"):
+        called in analysis.py, in store_trees()
+
+    write_columns_existing(self, file_name, header):
+
     """
 
     def __init__(self, decision_times):
@@ -240,7 +250,7 @@ class BaseStorageTree(object, metaclass=ABCMeta):
         output_lst = []
         for t in self.decision_times[:-1]:
             output_lst.extend(self.tree[t])
-        #print('***DEBUG: In StorageTree.write_columns_existing. Passing ',output_lst,' to write_columns_to_existing. header = ',header,' ***')
+        print('    ***DEBUG: In StorageTree.write_columns_existing. Passing array ',header,' to write_columns_to_existing with length = ',len(output_lst))
         write_columns_to_existing(lst=output_lst, file_name=file_name, header=header)
 
 

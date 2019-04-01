@@ -1,3 +1,47 @@
+"""
+KD Comments:
+
+1. This code establishes three classes: 
+
+class ClimateOutput(object):
+class RiskDecomposition(object):
+class ConstraintAnalysis(object):
+
+A. Each of these classes has a save_ooutput() method.
+
+ ClimateOutput(object):      - node_period_output.csv
+ RiskDecomposition(object):  - sensitivity_output.csv
+ ConstraintAnalysis(object): - constraint_output.csv
+
+2. In addition, there are a set of functions defined to aid in analyzing/storing results.
+
+    functions:
+    ----------
+
+    additional_ghg_emission(m, utility) : 
+
+    store_trees(prefix=None, start_year=2015, **kwargs): store tree in csv files.
+
+        - This is called in ClimateOutput.save_output() to save the Utility and Consumption trees,
+        - and in RiskDecomposition.store_output() to store the SDF and DeltaConsumption trees.
+
+        - store_trees calls tree.write_columns() for each of the args provided.
+             - tree.write_columns() is defined in storage_tree.py
+
+    delta_consumption(m, utility, cons_tree, cost_tree, delta_m):
+
+    constraint_first_period(utility, first_node, m_size):
+
+    find_ir(m, utility, payment, a=0.0, b=1.0):
+
+    find_term_structure(m, utility, payment, a=0.0, b=1.5):
+
+    find_bec(m, utility, constraint_cost, a=-150, b=150):
+
+    perpetuity_yield(price, start_date, a=0.1, b=100000):
+
+
+"""
 import numpy as np
 from scipy.optimize import brentq
 from ezclimate.storage_tree import BigStorageTree, SmallStorageTree
@@ -46,7 +90,6 @@ def store_trees(prefix=None, start_year=2015, **kwargs):
     """
     if prefix is None:
         prefix = ""
-    #print(f'***TREE DEBUG --- writing trees for {prefix}')
     for name, tree in list(kwargs.items()):
         tree.write_columns(prefix + "trees", name, start_year)
 
@@ -316,7 +359,7 @@ class ClimateOutput(object):
         average emissions
     expected_period_price : ndarray
         expected SCC for the period
-     expected_period_mitigation : ndarray
+    expected_period_mitigation : ndarray
         expected mitigation for the period
     expected_period_emissions : ndarray
         expected emission for the period
@@ -458,7 +501,7 @@ class RiskDecomposition(object):
         covariance between SDF and damages
 
     """
-
+    
     def __init__(self, utility):
         self.utility = utility
         self.sdf_tree = BigStorageTree(utility.period_len, utility.decision_times)
