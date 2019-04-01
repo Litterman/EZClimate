@@ -75,8 +75,17 @@ def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
             if nested_list:
                 row.extend(lst[i])
             else:
-                row.append(lst[i])
-            #print('***In WCTE, row ',i,'+ = ', row)
+                try:
+                    item = lst[i]
+                except IndexError:
+                    print(' *** Index Error (1) in WCTE; i=',i)
+                    print(' *** Index Error (1) in WCTE; len(lst)=',len(lst))
+                try:
+                    row.append(item)
+                except IndexError:
+                    print(' *** Index Error (2) in WCTE; i=',i)
+                    print(' *** Index Error (2) in WCTE; row=', row)
+
             all_lst.append(row)
             i += 1
     #print('***In WCTE, all_lst =',all_lst)
