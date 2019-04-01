@@ -49,51 +49,41 @@ def write_columns_csv(lst, file_name, header=[], index=None, start_char=None, de
             writer.writerow(row)
 
 def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
-    """
-    Append data column or columns to an existing CSV file.
-    Parameters
-    ----------
-    lst : list or np.ndarray
-        contains column or columns to append; if single column, a flat list;
-        if multiple columns, a nested list or list of 1D np.ndarrays
-    file_name : str
-        file name to append to
-    header : str or list
-        header for the added columns; if adding just one column, a
-        string, otherwise a List[str]
-    delimiter : str
-        delimiter for the CSV file (default semi-colon)
-    """
-
-    # Is there one added column, or multiple? If first item list or np.ndarrary
-    # (i.e. nested_list) => multiple; otherwise => single added column. If
-    # nested / multiple columns, transpose into rows for row-oriented output.
-    is_nested_list = lst and (isinstance(lst[0], list) or
-                                isinstance(lst[0], np.ndarray))
-    if is_nested_list:
-        lst = list(zip(*lst))   # transpose columns -> rows
-
-    file_path = find_path(file_name)
-    output_rows = []
-
-    # read and extend input
-    with open(file_path, 'r') as finput:
+    d = find_path(file_name)
+    #print('***In WCTE, lst= ',lst)
+    with open(d, 'r') as finput:
         reader = csv.reader(finput, delimiter=delimiter)
-
-        # extend header row
+        all_lst = []
         row = next(reader)
-        row.extend(header if is_nested_list else [header])
-        output_rows.append(row)
-
-        # extend rest of the rows
-        for i, row in enumerate(reader):
-            row.extend(lst[i] if is_nested_list else [lst[i]])
-            output_rows.append(row)
-
-    # emit output, overwriting original file
-    with open(file_path, 'w') as foutput:
+        #print('***In WCTE, row- = ', row)
+        nested_list = isinstance(lst[0], list) or isinstance(lst[0], np.ndarray)
+        #print('***In WCTE, type(lst[0]) ',type(lst[0]))
+        if nested_list:
+            lst = list(zip(*lst))
+            row.extend(header)    
+        else:
+            row.append(header)
+        #print('***In WCTE, row+ = ', row)
+        all_lst.append(row)
+        n = len(lst)
+        i = 0
+        for row in reader:
+            if i >= n:
+                print('***(temporary) emergency break with i=',i)
+                break
+            #print('***In WCTE, row ',i,'- = ', row)
+            print('***IN WCTE, len(lst),i,lst[i]',len(lst),i,lst[i])
+            if nested_list:
+                row.extend(lst[i])
+            else:
+                row.append(lst[i])
+            #print('***In WCTE, row ',i,'+ = ', row)
+            all_lst.append(row)
+            i += 1
+    #print('***In WCTE, all_lst =',all_lst)
+    with open(d, 'w') as foutput:
         writer = csv.writer(foutput, delimiter=delimiter)
-        writer.writerows(output_rows)
+        writer.writerows(all_lst)
             
 def append_to_existing(lst, file_name, header="", index=None, delimiter=';', start_char=None):
     write_columns_csv(lst, file_name, header, index, start_char=start_char, delimiter=delimiter, open_as='a')
