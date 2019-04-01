@@ -50,7 +50,7 @@ def write_columns_csv(lst, file_name, header=[], index=None, start_char=None, de
 
 def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
     d = find_path(file_name)
-    print('***In WCTE, lst shape = ',lst.shape)
+    print('***In WCTE, len(lst) shape = ',len(lst))
     with open(d, 'r') as finput:
         reader = csv.reader(finput, delimiter=delimiter)
         all_lst = []
@@ -64,7 +64,7 @@ def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
         else:
             row.append(header)
         print('***In WCTE, after header, row = ', row)
-        print('***In WCTE, after header, lst shape = ',lst.shape)
+        print('***In WCTE, after header, len(lst) = ',len(lst))
 
         all_lst.append(row)
         n = len(lst)

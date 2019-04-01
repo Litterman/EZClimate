@@ -31,7 +31,7 @@ A. Each of these classes has a save_output() method to save to:
 
     additional_ghg_emission(m, utility) : 
 
-    store_trees(prefix=None, start_year=2015, **kwargs): store tree in csv files.
+    store_trees(prefix=None, start_year=2015, tree_dict = {}): store tree in csv files.
 
         - called in ClimateOutput.save_output() to save the Utility and Consumption trees,
           and in RiskDecomposition.store_output() to store the SDF and DeltaConsumption trees.
@@ -84,7 +84,7 @@ def additional_ghg_emission(m, utility):
                 cache.add(path[i])
     return additional_emission
 
-def store_trees(prefix=None, start_year=2015, tree_data={}):
+def store_trees(prefix=None, start_year=2015, tree_dict={}):
     """Saves values of `BaseStorageTree` objects. The file is saved into the 'data' directory
     in the current working directory. If there is no 'data' directory, one is created. 
 
@@ -100,8 +100,8 @@ def store_trees(prefix=None, start_year=2015, tree_data={}):
     """
     if prefix is None:
         prefix = ""
-    for name in tree_data.keys():
-        tree_data[name].write_columns(prefix + "trees", name, start_year)
+    for name in tree_dict.keys():
+        tree_dict[name].write_columns(prefix + "trees", name, start_year)
 
 def delta_consumption(m, utility, cons_tree, cost_tree, delta_m):
     """Calculate the changes in consumption and the mitigation cost component 
@@ -481,7 +481,7 @@ class ClimateOutput(object):
 
 
         tree_dict = self.utility.utility(m, return_trees=True)
-        store_trees(prefix = prefix, trees = tree_dict)
+        store_trees(prefix = prefix, tree_dict = tree_dict)
 
 
 class RiskDecomposition(object):
@@ -562,7 +562,7 @@ class RiskDecomposition(object):
         cost_sum = 0
 
         self.delta_cons_tree, self.delta_cost_array, delta_utility = delta_consumption(m, self.utility, cons_tree, cost_tree, 0.01)
-        mu_0, mu_1, mu_2 = self.utility.marginal_utility(m, utility_tree, cons_tree, cost_tree, ce_tree)
+        mu_0, mu_1, mu_2 = self.utility.marginal_utility(m, tree_dict)
         sub_len = self.sdf_tree.subinterval_len
         i = 1
         for period in self.sdf_tree.periods[1:]:
@@ -639,7 +639,7 @@ class RiskDecomposition(object):
                     header=["Zero Bound Price", "Perp Yield", "Expected Damages", "Risk Premium", 
                             "SCC"], start_char='\n')
         
-        store_trees(prefix=prefix, SDF=self.sdf_tree, DeltaConsumption=self.delta_cons_tree)
+        store_trees(prefix=prefix, tree_dict={'SDF':self.sdf_tree, 'DeltaConsumption':self.delta_cons_tree})
 
 
 class ConstraintAnalysis(object):
