@@ -82,7 +82,7 @@ def additional_ghg_emission(m, utility):
                 cache.add(path[i])
     return additional_emission
 
-def store_trees(prefix=None, start_year=2015, tree_data = tree_data):
+def store_trees(prefix=None, start_year=2015, tree_data={}):
     """Saves values of `BaseStorageTree` objects. The file is saved into the 'data' directory
     in the current working directory. If there is no 'data' directory, one is created. 
 
