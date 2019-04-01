@@ -57,6 +57,8 @@ def write_columns_csv(lst, file_name, header=[], index=None, start_char=None, de
         if file_name.find('tree') >0:
             print('***DONE -- rite_columns_csv')
             print()
+    if file_name.find('tree') >0:
+        x = input('Please halt the program here and examine the _trees file in the data folder') 
         
 
 def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
