@@ -32,8 +32,8 @@ def load_csv(file_name, delimiter=';', comment=None):
 
 def write_columns_csv(lst, file_name, header=[], index=None, start_char=None, delimiter=';', open_as='w'):
     d = find_path(file_name)
-    #if file_name.find('tree') >0:
-        # print('***in write_column_csv, file_name =',file_name,' header =',header,'index=',index,'lst=',lst)
+    if file_name.find('tree') >0:
+        print('***in write_column_csv, file_name =',file_name,' header =',header,'index=',index)
     if index is not None:
         index.extend(lst)
         output_lst = list(zip(*index))
