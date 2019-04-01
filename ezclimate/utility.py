@@ -209,7 +209,7 @@ class EZUtility(object):
 			utility_tree.set_value(period, u)
 			
 		if return_trees:
-			return utility_tree, cons_tree, cost_tree, ce_tree
+			return {'Utility':utility_tree, 'Consumption':cons_tree, 'Cost':cost_tree, 'CertainEquivalence':ce_tree}
 		return utility_tree[0]
 
 

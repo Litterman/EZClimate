@@ -7,11 +7,20 @@ class ClimateOutput(object):
 class RiskDecomposition(object):
 class ConstraintAnalysis(object):
 
-A. Each of these classes has a save_ooutput() method.
+A. Each of these classes has a save_output() method to save to:
 
- ClimateOutput(object):      - node_period_output.csv
- RiskDecomposition(object):  - sensitivity_output.csv
- ConstraintAnalysis(object): - constraint_output.csv
+    ClimateOutput(object):      - node_period_output.csv
+
+        - stores: 
+             Mitigation, Prices, Average Mitigation, Average Emission, GHG Level
+
+        - also, via a call to store_trees, stores:   
+             Utility, Consumption, Cost and CertainEquivalence
+             - these come from a call to utility.utility(m,return_trees = True)
+
+    RiskDecomposition(object):  - sensitivity_output.csv
+
+    ConstraintAnalysis(object): - constraint_output.csv
 
 2. In addition, there are a set of functions defined to aid in analyzing/storing results.
 
@@ -22,8 +31,8 @@ A. Each of these classes has a save_ooutput() method.
 
     store_trees(prefix=None, start_year=2015, **kwargs): store tree in csv files.
 
-        - This is called in ClimateOutput.save_output() to save the Utility and Consumption trees,
-        - and in RiskDecomposition.store_output() to store the SDF and DeltaConsumption trees.
+        - called in ClimateOutput.save_output() to save the Utility and Consumption trees,
+          and in RiskDecomposition.store_output() to store the SDF and DeltaConsumption trees.
 
         - store_trees calls tree.write_columns() for each of the args provided.
              - tree.write_columns() is defined in storage_tree.py
@@ -39,7 +48,6 @@ A. Each of these classes has a save_ooutput() method.
     find_bec(m, utility, constraint_cost, a=-150, b=150):
 
     perpetuity_yield(price, start_date, a=0.1, b=100000):
-
 
 """
 import numpy as np
@@ -74,7 +82,7 @@ def additional_ghg_emission(m, utility):
                 cache.add(path[i])
     return additional_emission
 
-def store_trees(prefix=None, start_year=2015, **kwargs):
+def store_trees(prefix=None, start_year=2015, tree_data = tree_data):
     """Saves values of `BaseStorageTree` objects. The file is saved into the 'data' directory
     in the current working directory. If there is no 'data' directory, one is created. 
 
@@ -90,8 +98,8 @@ def store_trees(prefix=None, start_year=2015, **kwargs):
     """
     if prefix is None:
         prefix = ""
-    for name, tree in list(kwargs.items()):
-        tree.write_columns(prefix + "trees", name, start_year)
+    for name in tree_data.keys():
+        tree_data[name].write_columns(prefix + "trees", name, start_year)
 
 def delta_consumption(m, utility, cons_tree, cost_tree, delta_m):
     """Calculate the changes in consumption and the mitigation cost component 
@@ -452,23 +460,23 @@ class ClimateOutput(object):
             prefix to be added to file_name
 
         """
-        utility_tree, cons_tree, cost_tree, ce_tree = self.utility.utility(m, return_trees=True)
-        
         if prefix is not None:
             prefix += "_" 
         else:
             prefix = ""
 
+        print('in ClimateOutput.save_output(), prefix =')
         write_columns_csv([m, self.prices, self.ave_mitigations, self.ave_emissions, self.ghg_levels], 
-                   prefix+"node_period_output", ["Node", "Mitigation", "Prices", "Average Mitigation",
-                   "Average Emission", "GHG Level"], [list(range(len(m)))])
+                    prefix+"node_period_output", ["Node", "Mitigation", "Prices", "Average Mitigation",
+                    "Average Emission", "GHG Level"], [list(range(len(m)))])
 
         append_to_existing([self.expected_period_price, self.expected_period_mitigation, self.expected_period_emissions],
-                            prefix+"node_period_output", header=["Period", "Expected Price", "Expected Mitigation",
-                            "Expected Emission"], index=[list(range(self.utility.tree.num_periods))], start_char='\n')
+                           prefix+"node_period_output", header=["Period", "Expected Price", "Expected Mitigation",
+                                "Expected Emission"], index=[list(range(self.utility.tree.num_periods))], start_char='\n')
 
-        store_trees(prefix=prefix, Utility=utility_tree, Consumption=cons_tree, 
-                Cost=cost_tree, CertainEquivalence=ce_tree)
+
+        utility_trees = self.utility.utility(m, return_trees=True)
+        store_trees(prefix = prefix, trees = utility_trees)
 
 
 class RiskDecomposition(object):
