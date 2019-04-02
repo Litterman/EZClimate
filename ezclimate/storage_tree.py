@@ -205,10 +205,8 @@ class BaseStorageTree(object, metaclass=ABCMeta):
         """
         from ezclimate.tools import write_columns_csv, file_exists
         if file_exists(file_name):
-            #print("***DEBUG File "+file_name+" exists.")
             self.write_columns_existing(file_name, header)
         else:
-            #print("***DEBUG File "+file_name+" doesn't exist.")
             real_times = self.decision_times[:-1]
             years = []
             nodes = []
@@ -220,7 +218,6 @@ class BaseStorageTree(object, metaclass=ABCMeta):
                     nodes.append(k)
                     output_lst.append(self.tree[t][n])
                     k += 1
-            #print('*** in write_columns, header = ',header,'lst = ',output_lst)
             write_columns_csv(lst=[output_lst], file_name=file_name, header=["Year", "Node", header], 
                               index=[years, nodes], delimiter=delimiter)
 
@@ -251,7 +248,6 @@ class BaseStorageTree(object, metaclass=ABCMeta):
         output_lst = []
         for t in self.decision_times[:-1]:
             output_lst.extend(self.tree[t])
-        print('    ***DEBUG: In StorageTree.write_columns_existing. Passing array ',header,' to write_columns_to_existing with length = ',len(output_lst))
         write_columns_to_existing(lst=output_lst, file_name=file_name, header=header)
 
 
