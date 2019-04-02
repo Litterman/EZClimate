@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import numpy as np
 import csv
 import io
@@ -106,17 +105,6 @@ def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
     """
     writes the tree elements in lst to and EXISTING file with name file_name.
     """
-    # d = find_path(file_name)
-    # if file_name.find('tree') >0:
-    #     print('WCTE -- input lst of length',len(lst),' is ', lst)
-    # all_lst = []
-
-    # print(d)
-
-    # with open(d, 'r') as finput:
-        # reader = csv.reader(clean_lines(finput), delimiter=delimiter)
-        # row = next(reader)
-
     is_nested_list = lst and (isinstance(lst[0], list) or
                                 isinstance(lst[0], np.ndarray))
     if is_nested_list:
@@ -143,48 +131,6 @@ def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
     with open(file_path, 'w') as foutput:
         writer = csv.writer(foutput, delimiter=delimiter)
         writer.writerows(output_rows)
-
-
-
-        # n = len(lst)
-        # i = 0
-        # for row in reader:
-            # rw = row.copy()
-            # print('***In WCTE after read, rw[',i,'] = ', rw)
-            # print('***In WCTE after read, rw[] = ', row)
-            # if i==0:
-            #     nested_list = isinstance(lst[0], list) or isinstance(lst[0], np.ndarray)
-            #     if nested_list:
-            #         lst = list(zip(*lst))
-            #         rw.extend(header)
-            #     else:
-            #         rw.append(header)
-            # else:
-            #     if nested_list:
-            #         rw.extend(lst[i-1])
-            #     else:
-            #         try:
-            #             item = lst[i-1]
-            #         except IndexError:
-            #             print(' *** Index Error (1) in WCTE; i=',i-1)
-            #             print(' *** Index Error (1) in WCTE; len(lst)=',len(lst))
-            #             print(' *** Index Error (1) in WCTE; rw=', rw)
-            #         try:
-            #             rw.append(item)
-            #         except IndexError:
-            #             print(' *** Index Error (2) in WCTE; i=',i)
-
-            # print('***In WCTE after write, rw[',i,'] = ', row)
-            # print('***IN WCTE, len(lst),i,lst[i]',len(lst),i,lst[i])
-            # all_lst.append(row)
-            # i += 1
-
-    # with open(d, 'w') as foutput:
-    #     writer = csv.writer(foutput, delimiter=delimiter)
-    #     writer.writerows(all_lst)
-    # if file_name.find('tree') >0:
-    #     x = input('WCTE - Please halt the program here and examine the _trees file in the data folder')
-
 
 def append_to_existing(lst, file_name, header="", index=None, delimiter=';', start_char=None):
     write_columns_csv(lst, file_name, header, index, start_char=start_char, delimiter=delimiter, open_as='a')
@@ -238,4 +184,3 @@ def _unpickle_method(func_name, obj, cls):
         else:
             break
     return func.__get__(obj, cls)
-
