@@ -30,6 +30,18 @@ def load_csv(file_name, delimiter=';', comment=None):
     d = find_path(file_name)
     pass
 
+def clean_lines(f):
+    """
+    Filter out blank lines to avoid prior cross-platform line termination problems.
+    """
+    lines = f.read().splitlines()
+    lines = [line for line in lines if line.strip()]
+    content = '\n'.join(lines)
+    sio = io.StringIO()
+    sio.write(content)
+    sio.seek(0)
+    return sio
+
 def write_columns_csv(lst, file_name, header=[], index=None, start_char=None, delimiter=';', open_as='w'):
     """
     write_columns_csv outputs tree data to an NEW (not existing) csv file
