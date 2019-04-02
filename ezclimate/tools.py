@@ -83,34 +83,29 @@ def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
     with open(d, 'r') as finput:
         reader = csv.reader(finput, delimiter=delimiter)
         all_lst = []
-        row = next(reader)
-        print('***In WCTE, first row = ', row)
-        rw = row.copy()
-        nested_list = isinstance(lst[0], list) or isinstance(lst[0], np.ndarray)
-        #print('***In WCTE, type(lst[0]) ',type(lst[0]))
-        if nested_list:
-            lst = list(zip(*lst))
-            rw.extend(header)    
-        else:
-            rw.append(header)
- 
-        all_lst.append(row)
         n = len(lst)
         i = 0
-        print('***In WCTE, rw[',i,'] = ', rw)
         for row in reader:
             rw = row.copy()
-            #print(' *** In WCTE i=',i,', and row =',rw)
-            if i >= (n+10):
+            print('***In WCTE, rw[',i,'] = ', rw)
+            if i==0:
+                nested_list = isinstance(lst[0], list) or isinstance(lst[0], np.ndarray)
+                if nested_list:
+                    lst = list(zip(*lst))
+                    rw.extend(header)    
+                else:
+                    rw.append(header)
+                    all_lst.append(rw)
+            elif i >= (n+10):
                 print('***(temporary) emergency break with i=',i)
                 break
             print('***In WCTE, rw[',i+1,'] = ', rw)
             #print('***IN WCTE, len(lst),i,lst[i]',len(lst),i,lst[i])
             if nested_list:
-                rw.extend(lst[i])
+                rw.extend(lst[i-1])
             else:
                 try:
-                    item = lst[i]
+                    item = lst[i-1]
                 except IndexError:
                     print(' *** Index Error (1) in WCTE; i=',i)
                     print(' *** Index Error (1) in WCTE; len(lst)=',len(lst))
