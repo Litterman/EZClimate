@@ -31,9 +31,20 @@ def load_csv(file_name, delimiter=';', comment=None):
     pass
 
 def write_columns_csv(lst, file_name, header=[], index=None, start_char=None, delimiter=';', open_as='w'):
+    """
+    write_columns_csv outputs tree data to an NEW (not existing) csv file
+
+    lst       : a list of a list containing data for a single tree
+    file_name : 
+    headers   : names of the trees; these are put in the first row of the csv file.
+    index     : index data (e.g., Year and Node)  
+                  - NB: Header should have the index names as the first element(s)
+    
+    """
     d = find_path(file_name)
     if file_name.find('tree') >0:
         print('***in write_column_csv, file_name =',file_name,' header =',header,'index=',index)
+        print('***lst = ',lst)    
     if index is not None:
         index.extend(lst)
         output_lst = list(zip(*index))
@@ -58,7 +69,7 @@ def write_columns_csv(lst, file_name, header=[], index=None, start_char=None, de
             print('***DONE -- rite_columns_csv')
             print()
     if file_name.find('tree') >0:
-        x = input('Please halt the program here and examine the _trees file in the data folder') 
+        x = input('WCC-- Please halt the program here and examine the _trees file in the data folder') 
         
 
 def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
@@ -105,10 +116,13 @@ def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
 
             all_lst.append(row)
             i += 1
-
+            
     with open(d, 'w') as foutput:
         writer = csv.writer(foutput, delimiter=delimiter)
         writer.writerows(all_lst)
+    if file_name.find('tree') >0:
+        x = input('WCTE - Please halt the program here and examine the _trees file in the data folder') 
+
             
 def append_to_existing(lst, file_name, header="", index=None, delimiter=';', start_char=None):
     write_columns_csv(lst, file_name, header, index, start_char=start_char, delimiter=delimiter, open_as='a')
