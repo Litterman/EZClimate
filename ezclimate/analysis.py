@@ -1,3 +1,57 @@
+"""
+KD Comments:
+
+*** NB: RiskDecomposition.sensitivity_analysis()  as implemented doesn't work -- no return statement
+
+1. This code establishes three classes: 
+
+class ClimateOutput(object):
+class RiskDecomposition(object):
+class ConstraintAnalysis(object):
+
+A. Each of these classes has a save_output() method to save to:
+
+    ClimateOutput(object):      - node_period_output.csv
+
+        - stores: 
+             Mitigation, Prices, Average Mitigation, Average Emission, GHG Level
+
+        - also, via a call to store_trees, stores:   
+             Utility, Consumption, Cost and CertainEquivalence
+             - these come from a call to utility.utility(m,return_trees = True)
+
+    RiskDecomposition(object):  - sensitivity_output.csv
+
+    ConstraintAnalysis(object): - constraint_output.csv
+
+2. In addition, there are a set of functions defined to aid in analyzing/storing results.
+
+    functions:
+    ----------
+
+    additional_ghg_emission(m, utility) : 
+
+    store_trees(prefix=None, start_year=2015, tree_dict = {}): store tree in csv files.
+
+        - called in ClimateOutput.save_output() to save the Utility and Consumption trees,
+          and in RiskDecomposition.store_output() to store the SDF and DeltaConsumption trees.
+
+        - store_trees calls tree.write_columns() for each of the args provided.
+             - tree.write_columns() is defined in storage_tree.py
+
+    delta_consumption(m, utility, cons_tree, cost_tree, delta_m):
+
+    constraint_first_period(utility, first_node, m_size):
+
+    find_ir(m, utility, payment, a=0.0, b=1.0):
+
+    find_term_structure(m, utility, payment, a=0.0, b=1.5):
+
+    find_bec(m, utility, constraint_cost, a=-150, b=150):
+
+    perpetuity_yield(price, start_date, a=0.1, b=100000):
+
+"""
 import numpy as np
 from scipy.optimize import brentq
 from ezclimate.storage_tree import BigStorageTree, SmallStorageTree
@@ -30,7 +84,7 @@ def additional_ghg_emission(m, utility):
                 cache.add(path[i])
     return additional_emission
 
-def store_trees(prefix=None, start_year=2015, **kwargs):
+def store_trees(prefix=None, start_year=2015, tree_dict={}):
     """Saves values of `BaseStorageTree` objects. The file is saved into the 'data' directory
     in the current working directory. If there is no 'data' directory, one is created. 
 
@@ -46,13 +100,12 @@ def store_trees(prefix=None, start_year=2015, **kwargs):
     """
     if prefix is None:
         prefix = ""
-    #print(f'***TREE DEBUG --- writing trees for {prefix}')
-    for name, tree in list(kwargs.items()):
-        tree.write_columns(prefix + "trees", name, start_year)
+    for name in tree_dict.keys():
+        tree_dict[name].write_columns(prefix + "trees", name, start_year)
 
 def delta_consumption(m, utility, cons_tree, cost_tree, delta_m):
     """Calculate the changes in consumption and the mitigation cost component 
-    of consumption when increaseing period 0 mitigiation with `delta_m`.
+    of consumption when increasing period 0 mitigiation with `delta_m`.
 
     Parameters
     ----------
@@ -77,8 +130,11 @@ def delta_consumption(m, utility, cons_tree, cost_tree, delta_m):
     m_copy = m.copy()
     m_copy[0] += delta_m
 
-    new_utility_tree, new_cons_tree, new_cost_tree, new_ce_tree = utility.utility(m_copy, return_trees=True)
-
+    tree_dict = utility.utility(m_copy, return_trees=True)
+    new_cons_tree = tree_dict['Consumption']
+    new_cost_tree = tree_dict['Cost']
+    new_utility_tree = tree_dict['Utility']
+    
     for period in new_cons_tree.periods:
         new_cons_tree.tree[period] = (new_cons_tree.tree[period]-cons_tree.tree[period]) / delta_m
 
@@ -316,7 +372,7 @@ class ClimateOutput(object):
         average emissions
     expected_period_price : ndarray
         expected SCC for the period
-     expected_period_mitigation : ndarray
+    expected_period_mitigation : ndarray
         expected mitigation for the period
     expected_period_emissions : ndarray
         expected emission for the period
@@ -409,23 +465,23 @@ class ClimateOutput(object):
             prefix to be added to file_name
 
         """
-        utility_tree, cons_tree, cost_tree, ce_tree = self.utility.utility(m, return_trees=True)
-        
         if prefix is not None:
             prefix += "_" 
         else:
             prefix = ""
 
+        #print('in ClimateOutput.save_output(), prefix =',prefix)
         write_columns_csv([m, self.prices, self.ave_mitigations, self.ave_emissions, self.ghg_levels], 
-                   prefix+"node_period_output", ["Node", "Mitigation", "Prices", "Average Mitigation",
-                   "Average Emission", "GHG Level"], [list(range(len(m)))])
+                    prefix+"node_period_output", ["Node", "Mitigation", "Prices", "Average Mitigation",
+                    "Average Emission", "GHG Level"], [list(range(len(m)))])
 
         append_to_existing([self.expected_period_price, self.expected_period_mitigation, self.expected_period_emissions],
-                            prefix+"node_period_output", header=["Period", "Expected Price", "Expected Mitigation",
-                            "Expected Emission"], index=[list(range(self.utility.tree.num_periods))], start_char='\n')
+                           prefix+"node_period_output", header=["Period", "Expected Price", "Expected Mitigation",
+                                "Expected Emission"], index=[list(range(self.utility.tree.num_periods))], start_char='\n')
 
-        store_trees(prefix=prefix, Utility=utility_tree, Consumption=cons_tree, 
-                Cost=cost_tree, CertainEquivalence=ce_tree)
+
+        tree_dict = self.utility.utility(m, return_trees=True)
+        store_trees(prefix = prefix, tree_dict = tree_dict)
 
 
 class RiskDecomposition(object):
@@ -458,7 +514,7 @@ class RiskDecomposition(object):
         covariance between SDF and damages
 
     """
-
+    
     def __init__(self, utility):
         self.utility = utility
         self.sdf_tree = BigStorageTree(utility.period_len, utility.decision_times)
@@ -497,11 +553,16 @@ class RiskDecomposition(object):
 
         """
 
-        utility_tree, cons_tree, cost_tree, ce_tree = self.utility.utility(m, return_trees=True)
+        tree_dict = self.utility.utility(m, return_trees=True)
+        utility_tree = tree_dict['Utility']
+        cons_tree = tree_dict['Consumption']
+        cost_tree = tree_dict['Cost']
+        ce_tree = tree_dict['CertainEquivalence']
+
         cost_sum = 0
 
         self.delta_cons_tree, self.delta_cost_array, delta_utility = delta_consumption(m, self.utility, cons_tree, cost_tree, 0.01)
-        mu_0, mu_1, mu_2 = self.utility.marginal_utility(m, utility_tree, cons_tree, cost_tree, ce_tree)
+        mu_0, mu_1, mu_2 = self.utility.marginal_utility(m, tree_dict)
         sub_len = self.sdf_tree.subinterval_len
         i = 1
         for period in self.sdf_tree.periods[1:]:
@@ -578,7 +639,7 @@ class RiskDecomposition(object):
                     header=["Zero Bound Price", "Perp Yield", "Expected Damages", "Risk Premium", 
                             "SCC"], start_char='\n')
         
-        store_trees(prefix=prefix, SDF=self.sdf_tree, DeltaConsumption=self.delta_cons_tree)
+        store_trees(prefix=prefix, tree_dict={'SDF':self.sdf_tree, 'DeltaConsumption':self.delta_cons_tree})
 
 
 class ConstraintAnalysis(object):
