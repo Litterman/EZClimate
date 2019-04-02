@@ -31,6 +31,8 @@ def load_csv(file_name, delimiter=';', comment=None):
     d = find_path(file_name)
     pass
 
+import io
+
 def clean_lines(f):
     """
     Filter out blank lines to avoid prior cross-platform line termination problems.
@@ -48,16 +50,16 @@ def write_columns_csv(lst, file_name, header=[], index=None, start_char=None, de
     write_columns_csv outputs tree data to an NEW (not existing) csv file
 
     lst       : a list of a list containing data for a single tree
-    file_name : 
+    file_name :
     headers   : names of the trees; these are put in the first row of the csv file.
-    index     : index data (e.g., Year and Node)  
+    index     : index data (e.g., Year and Node)
                   - NB: Header should have the index names as the first element(s)
-    
+
     """
     d = find_path(file_name)
     if file_name.find('tree') >0:
         print('***in write_column_csv, file_name =',file_name,' header =',header,'index=',index)
-        print('***lst = ',lst)    
+        print('***lst = ',lst)
     if index is not None:
         index.extend(lst)
         output_lst = list(zip(*index))
@@ -82,8 +84,23 @@ def write_columns_csv(lst, file_name, header=[], index=None, start_char=None, de
             print('***DONE -- rite_columns_csv')
             print()
     if file_name.find('tree') >0:
-        x = input('WCC-- Please halt the program here and examine the _trees file in the data folder') 
-        
+        x = input('WCC-- Please halt the program here and examine the _trees file in the data folder')
+
+
+def clean_lines(f):
+    """
+    Filter out blank lines in the given file in order to avoid
+    cross-platform line termination problems that
+    previously led to data files with blank lines.
+    """
+    lines = f.read().splitlines()
+    lines = [line for line in lines if line.strip()]
+    content = '\n'.join(lines)
+    sio = io.StringIO()
+    sio.write(content)
+    sio.seek(0)
+    return sio
+
 
 def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
     """
@@ -95,9 +112,9 @@ def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
     # all_lst = []
 
     # print(d)
-    
+
     # with open(d, 'r') as finput:
-        # reader = csv.reader(finput, delimiter=delimiter)
+        # reader = csv.reader(clean_lines(finput), delimiter=delimiter)
         # row = next(reader)
 
     is_nested_list = lst and (isinstance(lst[0], list) or
@@ -110,7 +127,7 @@ def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
 
     # read and extend input
     with open(file_path, 'r') as finput:
-        reader = csv.reader(finput, delimiter=delimiter)
+        reader = csv.reader(clean_lines(finput), delimiter=delimiter)
 
         # extend header row
         row = next(reader)
@@ -139,10 +156,10 @@ def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
             #     nested_list = isinstance(lst[0], list) or isinstance(lst[0], np.ndarray)
             #     if nested_list:
             #         lst = list(zip(*lst))
-            #         rw.extend(header)    
+            #         rw.extend(header)
             #     else:
             #         rw.append(header)
-            # else: 
+            # else:
             #     if nested_list:
             #         rw.extend(lst[i-1])
             #     else:
@@ -156,19 +173,19 @@ def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
             #             rw.append(item)
             #         except IndexError:
             #             print(' *** Index Error (2) in WCTE; i=',i)
-    
+
             # print('***In WCTE after write, rw[',i,'] = ', row)
             # print('***IN WCTE, len(lst),i,lst[i]',len(lst),i,lst[i])
             # all_lst.append(row)
             # i += 1
-            
+
     # with open(d, 'w') as foutput:
     #     writer = csv.writer(foutput, delimiter=delimiter)
     #     writer.writerows(all_lst)
     # if file_name.find('tree') >0:
-    #     x = input('WCTE - Please halt the program here and examine the _trees file in the data folder') 
+    #     x = input('WCTE - Please halt the program here and examine the _trees file in the data folder')
 
-            
+
 def append_to_existing(lst, file_name, header="", index=None, delimiter=';', start_char=None):
     write_columns_csv(lst, file_name, header, index, start_char=start_char, delimiter=delimiter, open_as='a')
 
@@ -177,7 +194,7 @@ def import_csv(file_name, delimiter=';', header=True, indices=None, start_at=0, 
     input_lst = []
     indices_lst = []
     with open(d, 'r') as f:
-        reader = csv.reader(f, delimiter=delimiter)
+        reader = csv.reader(clean_lines(f), delimiter=delimiter)
         for _ in range(0, start_at):
             next(reader)
         if header:
@@ -221,4 +238,3 @@ def _unpickle_method(func_name, obj, cls):
         else:
             break
     return func.__get__(obj, cls)
-
