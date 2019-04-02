@@ -87,7 +87,7 @@ def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
         i = 0
         for row in reader:
             rw = row.copy()
-            print('***In WCTE, rw[',i,'] = ', rw)
+            print('***In WCTE after read, rw[',i,'] = ', rw)
             if i==0:
                 nested_list = isinstance(lst[0], list) or isinstance(lst[0], np.ndarray)
                 if nested_list:
@@ -95,26 +95,23 @@ def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
                     rw.extend(header)    
                 else:
                     rw.append(header)
-                    all_lst.append(rw)
-            elif i >= (n+10):
-                print('***(temporary) emergency break with i=',i)
-                break
-            print('***In WCTE, rw[',i+1,'] = ', rw)
+            else: 
+                if nested_list:
+                    rw.extend(lst[i-1])
+                else:
+                    try:
+                        item = lst[i-1]
+                    except IndexError:
+                        print(' *** Index Error (1) in WCTE; i=',i-1)
+                        print(' *** Index Error (1) in WCTE; len(lst)=',len(lst))
+                        print(' *** Index Error (1) in WCTE; rw=', rw)
+                    try:
+                        rw.append(item)
+                    except IndexError:
+                        print(' *** Index Error (2) in WCTE; i=',i)
+    
+            print('***In WCTE after write, rw[',i,'] = ', rw)
             #print('***IN WCTE, len(lst),i,lst[i]',len(lst),i,lst[i])
-            if nested_list:
-                rw.extend(lst[i-1])
-            else:
-                try:
-                    item = lst[i-1]
-                except IndexError:
-                    print(' *** Index Error (1) in WCTE; i=',i)
-                    print(' *** Index Error (1) in WCTE; len(lst)=',len(lst))
-                    print(' *** Index Error (1) in WCTE; rw=', rw)
-                try:
-                    rw.append(item)
-                except IndexError:
-                    print(' *** Index Error (2) in WCTE; i=',i)
-
             all_lst.append(rw)
             i += 1
             
