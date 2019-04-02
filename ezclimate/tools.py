@@ -73,48 +73,54 @@ def write_columns_csv(lst, file_name, header=[], index=None, start_char=None, de
         
 
 def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
+    """
+    writes the tree elements in lst to and EXISTING file with name file_name.
+    """
     d = find_path(file_name)
-    #print('***In WCTE, len(lst) shape = ',len(lst))
+    if file_name.find('tree') >0:
+        print('WCTE -- input lst of length',len(lst),' is ', lst)
+
     with open(d, 'r') as finput:
         reader = csv.reader(finput, delimiter=delimiter)
         all_lst = []
         row = next(reader)
-        #print('***In WCTE, row- = ', row)
+        print('***In WCTE, first row = ', row)
+        rw = row.copy()
         nested_list = isinstance(lst[0], list) or isinstance(lst[0], np.ndarray)
         #print('***In WCTE, type(lst[0]) ',type(lst[0]))
         if nested_list:
             lst = list(zip(*lst))
-            row.extend(header)    
+            rw.extend(header)    
         else:
-            row.append(header)
-        #print('***In WCTE, after header, row = ', row)
-        #print('***In WCTE, after header, len(lst) = ',len(lst))
-
+            rw.append(header)
+ 
         all_lst.append(row)
         n = len(lst)
         i = 0
+        print('***In WCTE, rw[',i,'] = ', rw)
         for row in reader:
-            #print(' *** In WCTE i=',i,', and row =',row)
+            rw = row.copy()
+            #print(' *** In WCTE i=',i,', and row =',rw)
             if i >= (n+10):
                 print('***(temporary) emergency break with i=',i)
                 break
-            #print('***In WCTE, row ',i,'- = ', row)
+            print('***In WCTE, rw[',i+1,'] = ', rw)
             #print('***IN WCTE, len(lst),i,lst[i]',len(lst),i,lst[i])
             if nested_list:
-                row.extend(lst[i])
+                rw.extend(lst[i])
             else:
                 try:
                     item = lst[i]
                 except IndexError:
                     print(' *** Index Error (1) in WCTE; i=',i)
                     print(' *** Index Error (1) in WCTE; len(lst)=',len(lst))
-                    print(' *** Index Error (2) in WCTE; row=', row)
+                    print(' *** Index Error (1) in WCTE; rw=', rw)
                 try:
-                    row.append(item)
+                    rw.append(item)
                 except IndexError:
                     print(' *** Index Error (2) in WCTE; i=',i)
 
-            all_lst.append(row)
+            all_lst.append(rw)
             i += 1
             
     with open(d, 'w') as foutput:
