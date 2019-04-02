@@ -9,7 +9,7 @@ else:
     read_md = lambda f: convert(f, 'rst')
 
 setup(name='ezclimate',
-      version='2.0.5',
+      version='2.0.6',
       description='EZ-Climate model',
       long_description=read_md('README.md'),
       classifiers=[
@@ -18,7 +18,7 @@ setup(name='ezclimate',
       ],
       keywords='EZ-climate, optimal carbon price, CO2 tax, social cost of carbon, SCC, social cost of carbon dioxide, SC-CO2',
       url='http://github.com/Litterman/EZClimate',
-      author='Gernot Wagner, Kent Daniel, Robert Litterman',
+      author='Kent Daniel, Robert Litterman, Gernot Wagner',
       license='MIT',
       packages=find_packages(),
       install_requires=['numpy',],
