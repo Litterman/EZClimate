@@ -119,35 +119,6 @@ def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
 
         # extend header row
         row = next(reader)
-<<<<<<< HEAD
-        #print('***In WCTE, row- = ', row)
-        nested_list = isinstance(lst[0], list) or isinstance(lst[0], np.ndarray)
-        #print('***In WCTE, type(lst[0]) ',type(lst[0]))
-        if nested_list:
-            lst = list(zip(*lst))
-            row.extend(header)    
-        else:
-            row.append(header)
-        #print('***In WCTE, row+ = ', row)
-        all_lst.append(row)
-        n = len(lst)
-        i = 0
-        for row in reader:
-            if i >= n:
-                print('***(temporary) emergency break with i=',i)
-                break
-            #print('***In WCTE, row ',i,'- = ', row)
-            print('***IN WCTE, len(lst),i,lst[i]',len(lst),i,lst[i])
-            if nested_list:
-                row.extend(lst[i])
-            else:
-                row.append(lst[i])
-            #print('***In WCTE, row ',i,'+ = ', row)
-            all_lst.append(row)
-            i += 1
-    #print('***In WCTE, all_lst =',all_lst)
-    with open(d, 'w') as foutput:
-=======
         row.extend(header if is_nested_list else [header])
         output_rows.append(row)
 
@@ -158,7 +129,6 @@ def write_columns_to_existing(lst, file_name, header="", delimiter=';'):
 
     # emit output, overwriting original file
     with open(file_path, 'w') as foutput:
->>>>>>> 69ff3bb59d67d91cba4844b4d7c2ec43840304a8
         writer = csv.writer(foutput, delimiter=delimiter)
         writer.writerows(output_rows)
 
