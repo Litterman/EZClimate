@@ -52,22 +52,13 @@ def write_columns_csv(lst, file_name, header=[], index=None, start_char=None, de
     file_name :
     headers   : names of the trees; these are put in the first row of the csv file.
     index     : index data (e.g., Year and Node)
-                  - NB: Header should have the index names as the first element(s)
-
-    """
+     """
     d = find_path(file_name)
-    if file_name.find('tree') >0:
-        print('***in write_column_csv, file_name =',file_name,' header =',header,'index=',index)
-        print('***lst = ',lst)
     if index is not None:
         index.extend(lst)
         output_lst = list(zip(*index))
     else:
         output_lst = list(zip(*lst))
-    if file_name.find('tree') >0:
-        print()
-        print('***in write_column_csv,output_lst=',output_lst)
-        print()
 
     with open(d, open_as) as f:
         writer = csv.writer(f, delimiter=delimiter)
@@ -76,15 +67,7 @@ def write_columns_csv(lst, file_name, header=[], index=None, start_char=None, de
         if header:
             writer.writerow(header)
         for row in output_lst:
-            if file_name.find('tree') >0:
-                print('    ***write_columns_csv -- type:',type(row),', row=', row)
             writer.writerow(row)
-        if file_name.find('tree') >0:
-            print('***DONE -- rite_columns_csv')
-            print()
-    if file_name.find('tree') >0:
-        x = input('WCC-- Please halt the program here and examine the _trees file in the data folder')
-
 
 def clean_lines(f):
     """
