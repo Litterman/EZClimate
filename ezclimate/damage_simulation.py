@@ -293,20 +293,3 @@ class DamageSimulation(object):
         if write_to_file:
             self._write_to_file()
         return self.d
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-

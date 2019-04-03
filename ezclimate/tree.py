@@ -349,6 +349,3 @@ class TreeModel(object):
 
         k = int(self.num_final_states / 2**period)
         return (k*state, k*(state+1)-1)
-
-  
-

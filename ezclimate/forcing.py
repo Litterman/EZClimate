@@ -1,4 +1,3 @@
-
 import numpy as np
 
 
@@ -166,4 +165,4 @@ class Forcing(object):
             GHG level at node
 
         """
-        return cls.forcing_and_ghg_at_node(m, node,tree, bau, subinterval_len, returning="ghg")
+        return cls.forcing_and_ghg_at_node(m, node, tree, bau, subinterval_len, returning="ghg")
