@@ -33,7 +33,7 @@ A. Each of these classes has a save_output() method to save to:
 
     store_trees(prefix=None, start_year=2015, tree_dict = {}): store tree in csv files.
 
-        - called in ClimateOutput.save_output() to save the Utility and Consumption trees,
+        - called in ClimateOutput.save_output() to save Utility, Consumption, Cost, and Certainty Equivalence trees,
           and in RiskDecomposition.store_output() to store the SDF and DeltaConsumption trees.
 
         - store_trees calls tree.write_columns() for each of the args provided.
