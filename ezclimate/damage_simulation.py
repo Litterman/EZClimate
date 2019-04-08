@@ -220,6 +220,8 @@ class DamageSimulation(object):
         for pos in first_occurance:
             consump[pos[0], pos[1]:] *= np.exp(-disaster_cons[pos[0]])
         return consump
+        # tipping point after final period goes here?
+        
 
     def _run_path(self, temperature):
         """Calculate the distribution of damage for specific GHG-path. Implementation of 
