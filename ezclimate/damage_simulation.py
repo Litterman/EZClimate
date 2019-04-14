@@ -215,9 +215,13 @@ class DamageSimulation(object):
         # this part may be done better, this takes a long time to loop over
         res = prob_of_survival < disaster
         rows, cols = np.nonzero(res)
-        row, count = np.unique(rows, return_counts=True)
-        first_occurance = list(zip(row, cols[np.insert(count.cumsum()[:-1],0,0)]))
-        for pos in first_occurance:
+        if self.multiple_tipping_points:
+            positions = list(zip(rows, cols))
+        else:
+            row, count = np.unique(rows, return_counts=True)
+            positions = list(zip(row, cols[np.insert(count.cumsum()[:-1],0,0)]))
+            
+        for pos in positions:
             consump[pos[0], pos[1]:] *= np.exp(-disaster_cons[pos[0]])
         return consump
         # tipping point after final period goes here?
@@ -247,7 +251,7 @@ class DamageSimulation(object):
             d[n,] = np.maximum(0.0, damage[weights[n-1]:weights[n], :].mean(axis=0))
         return d
 
-    def simulate(self, draws, write_to_file=True):
+    def simulate(self, draws, write_to_file=True, multiple_tipping_points=False):
         """Create damage function values in 'p-period' version of the Summers - Zeckhauser model.
 
         Parameters
@@ -273,7 +277,8 @@ class DamageSimulation(object):
 
         """
         dnum = len(self.ghg_levels)
-        self.draws = draws 
+        self.draws = draws
+        self.multiple_tipping_points = multiple_tipping_points
         self.peak_cons = np.exp(self.cons_growth*self.tree.decision_times[1:])
 
         if self.temp_map == 0:
