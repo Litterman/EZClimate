@@ -5,7 +5,7 @@ from ezclimate.tools import write_columns_csv, append_to_existing
 try:
     import copyreg
 except:
-    import copyreg as copy_reg
+    import copy_reg as copyreg
 import types
 
 copyreg.pickle(types.MethodType, _pickle_method, _unpickle_method)
