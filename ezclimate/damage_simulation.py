@@ -260,6 +260,8 @@ class DamageSimulation(object):
             number of samples drawn in Monte Carlo simulation.
         write_to_file : bool, optional
             wheter to save simulated values 
+        multiple_tipping_points : bool, optional
+            if to allow multiple tipping points
        
         Returns
         -------
