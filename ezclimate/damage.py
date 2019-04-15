@@ -192,7 +192,7 @@ class DLWDamage(Damage):
 		self._damage_interpolation()
 
 	def damage_simulation(self, draws, peak_temp=9.0, disaster_tail=12.0, tip_on=True, 
-		multi_tips=False, temp_map=1, temp_dist_params=None, maxh=100.0, save_simulation=True):
+		multi_tips=True, temp_map=1, temp_dist_params=None, maxh=100.0, save_simulation=True):
 		"""Initialization and simulation of damages, given by :mod:`ez_climate.DamageSimulation`.
 
 		Parameters
