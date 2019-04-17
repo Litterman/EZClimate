@@ -251,7 +251,7 @@ class DamageSimulation(object):
             d[n,] = np.maximum(0.0, damage[weights[n-1]:weights[n], :].mean(axis=0))
         return d
 
-    def simulate(self, draws, write_to_file=True, multiple_tipping_points=True):
+    def simulate(self, draws, write_to_file=True, multiple_tipping_points=False):
         """Create damage function values in 'p-period' version of the Summers - Zeckhauser model.
 
         Parameters
