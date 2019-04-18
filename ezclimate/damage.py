@@ -192,7 +192,7 @@ class DLWDamage(Damage):
 		self._damage_interpolation()
 
 	def damage_simulation(self, draws, peak_temp=9.0, disaster_tail=12.0, tip_on=True, 
-		temp_map=1, temp_dist_params=None, maxh=100.0, save_simulation=True):
+		multi_tips=False, temp_map=1, temp_dist_params=None, maxh=100.0, save_simulation=True):
 		"""Initialization and simulation of damages, given by :mod:`ez_climate.DamageSimulation`.
 
 		Parameters
@@ -205,6 +205,8 @@ class DLWDamage(Damage):
 			curvature of tipping point
 		tip_on : bool, optional
 			flag that turns tipping points on or off
+		multi_tips : bool, optional
+			if to allow multiple tipping points in simulation
 		temp_map : int, optional
 			mapping from GHG to temperature
 		        * 0: implies Pindyck displace gamma
@@ -231,8 +233,9 @@ class DLWDamage(Damage):
 		ds = DamageSimulation(tree=self.tree, ghg_levels=self.ghg_levels, peak_temp=peak_temp,
 					disaster_tail=disaster_tail, tip_on=tip_on, temp_map=temp_map, 
 					temp_dist_params=temp_dist_params, maxh=maxh, cons_growth=self.cons_growth)
+		self.ds = ds
 		print("Starting damage simulation..")
-		self.d = ds.simulate(draws, write_to_file = save_simulation)
+		self.d = ds.simulate(draws, write_to_file=save_simulation, multiple_tipping_points=multi_tips)
 		print("Done!")
 		self._damage_interpolation()
 		return self.d

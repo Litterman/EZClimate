@@ -4,7 +4,7 @@ from ezclimate.tools import _pickle_method, _unpickle_method
 try:
     import copyreg
 except:
-    import copyreg as copy_reg
+    import copy_reg as copyreg
 import types
 
 copyreg.pickle(types.MethodType, _pickle_method, _unpickle_method)
