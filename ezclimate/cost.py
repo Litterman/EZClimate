@@ -133,14 +133,3 @@ class DLWCost(Cost):
             return self.g * self.a * (mitigation**(self.a-1.0)) * tech_term
         else:
             return (self.max_price - (self.cbs_k/mitigation)**(1.0/self.cbs_b)) * tech_term
-
-
-
-
-
-
-
-
-
-
-

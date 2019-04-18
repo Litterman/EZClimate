@@ -134,5 +134,3 @@ class DLWBusinessAsUsual(BusinessAsUsual):
         for n in range(1, num_periods):
             self.bau_path[n] = self.bau_path[n-1] + self.emission_per_period[n]*self.emission_to_bau
 
-
-
