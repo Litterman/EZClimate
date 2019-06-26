@@ -528,7 +528,7 @@ class RiskDecomposition(object):
         self.expected_sdf[0] = 1.0
 
 
-     def save_output(self, m, prefix=None):
+    def save_output(self, m, prefix=None):
         """Save attributes calculated in `sensitivity_analysis` into the file prefix + `sensitivity_output`
         in the `data` directory in the current working directory.
 
