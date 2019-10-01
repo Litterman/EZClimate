@@ -8,7 +8,7 @@ You can find the most recent releases at: https://pypi.python.org/pypi/ezclimate
 
 ## Documentation
 
-See [Applying Asset Pricing Theory to Calibrate the Price of Climate Risk](https://gwagner.com/ezclimate/) for the latest working paper employing this code.
+See [Declining CO2 price paths](https://gwagner.com/ezclimate/) (PNAS, 1 October 2019) for our joint PNAS paper employing this code.
 
 ## Installation
 
