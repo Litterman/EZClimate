@@ -76,8 +76,9 @@ class GeneticAlgorithm(object):
         """Return 1D-array of random values in the given bound as the initial population."""
         pop = np.random.random([size, self.num_feature])*self.bound
         if self.fixed_values is not None:
+            self.fixed_values = self.fixed_values.flatten()
             for ind in pop:
-                ind[self.fixed_indices] = self.fixed_values
+                ind[self.fixed_indices] = self.fixed_values[self.fixed_indices]
         return pop
 
     def _evaluate(self, indvidual):
@@ -244,7 +245,8 @@ class GeneticAlgorithm(object):
             pop[i] += (prob > (1.0-ind_prob)).astype(int)*inc
             pop[i] = np.maximum(1e-5, pop[i])
             if self.fixed_values is not None:
-                pop[i][self.fixed_indices] = self.fixed_values
+                self.fixed_values = self.fixed_values.flatten()
+                pop[i][self.fixed_indices] = self.fixed_values[self.fixed_indices]
 
     def _show_evolution(self, fits, pop):
         """Print statistics of the evolution of the population."""
