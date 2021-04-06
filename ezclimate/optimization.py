@@ -505,7 +505,8 @@ class GradientSearch(object) :
             new_x[new_x < 0] = 0.0
 
             if self.fixed_values is not None:
-                new_x[self.fixed_indices] = self.fixed_values
+                self.fixed_values = self.fixed_values.flatten()
+                new_x[self.fixed_indices] = self.fixed_values[self.fixed_indices]
 
             x_hist[i+1] = new_x
             u_hist[i+1] = self.u.utility(new_x)[0]
